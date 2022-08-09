@@ -2,7 +2,7 @@
   "name": "pack-it-up-v2-server",
   "private": true,
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./src/server.js",
   "description": "Personal Portfolio redone with Gatsby",
   "author": "CheoR <cheo.roman+github@gmail.com>",
   "license": "MIT",
@@ -12,5 +12,26 @@
     "packing boxes",
     "shipping",
     "logistics"
-  ]
+  ],
+  "scripts": {
+    "start": "node 'build/server.js'",
+    "tsc": "tsc -w",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
+  },
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
