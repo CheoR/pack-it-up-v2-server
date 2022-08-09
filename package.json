@@ -1,0 +1,16 @@
+{
+  "name": "pack-it-up-v2-server",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "description": "Personal Portfolio redone with Gatsby",
+  "author": "CheoR <cheo.roman+github@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "react-native",
+    "apollo-server-express",
+    "packing boxes",
+    "shipping",
+    "logistics"
+  ]
+}
