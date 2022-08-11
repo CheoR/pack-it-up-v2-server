@@ -1,6 +1,6 @@
-// import { USERS } from "../data/users";
+// import { db } from "../data/db";
 
 // export const User = {
-//   ids: () => { return USERS.map(user => user.id)},
-//   names: () => { return USERS.map(user => user.name)},
+//   ids: () => { return db.users.map(user => user.id)},
+//   usernames: () => { return db.users.map(user => user.name)},
 // }
