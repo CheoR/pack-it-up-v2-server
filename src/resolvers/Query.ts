@@ -1,7 +1,7 @@
-import { USERS } from "../data/users";
+import { db } from "../data/db";
 
 export const Query = {
   users: () => {
-    return USERS;
+    return db.users;
   }
 };
