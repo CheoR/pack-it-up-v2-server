@@ -1,3 +1,4 @@
+require('dotenv').config();
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageLocalDefault,
@@ -5,12 +6,17 @@ import {
 import { ApolloServer, gql } from 'apollo-server-express';
 // import { IResolvers } from 'graphql-tools';
 import express from 'express';
+import mongoose from 'mongoose';
 import http from 'http';
 
 import { Query } from './resolvers/Query';
-// import  { User } from './resolvers/User';
 import { typeDefs } from './schemas/schema';
 
+const URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.jtenkl6.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+
+const dbConnection = async () => {
+  await mongoose.connect(URI, {})
+};
 
 async function startApolloServer() {
   const app = express();
@@ -40,3 +46,8 @@ async function startApolloServer() {
 }
 
 startApolloServer();
+
+
+dbConnection()
+  .then(() => console.log('🎉 connected to database successfully'))
+  .catch(error => console.error('dbConnection Error: ', error));
