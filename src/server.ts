@@ -1,23 +1,32 @@
 require('dotenv').config();
+
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageLocalDefault,
 } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
+
 import express from 'express';
 import mongoose from 'mongoose';
 import http from 'http';
 
-import { Mutation } from './resolvers/Mutation';
-import { Query } from './resolvers/Query';
-import { typeDefs } from './schemas/schema';
 import { db } from './data/db';
+import Users from './dataSources/Users';
+import {User as UserModel} from './models/user';
+import { Query } from './resolvers/Query';
+import { Mutation } from './resolvers/Mutation';
+import { typeDefs } from './schemas/schema';
 
 const URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.jtenkl6.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
 const dbConnection = async () => {
   await mongoose.connect(URI, {})
 };
+
+const dataSources = () => ({
+  // @ts-ignore
+  users: new Users(UserModel),
+});
 
 async function startApolloServer() {
   const app = express();
@@ -36,6 +45,7 @@ async function startApolloServer() {
       ApolloServerPluginLandingPageLocalDefault({ embed: true }),
     ],
     context: { db },
+    dataSources,
   });
 
   await server.start();

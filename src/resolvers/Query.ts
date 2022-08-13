@@ -1,7 +1,6 @@
-import { db } from "../data/db";
-
 export const Query = {
-  users: () => {
-    return db.users;
+  // @ts-ignore
+  users: async (parent, args, { dataSources: { users }}) => {
+    return users.getUsers();
   }
 };
