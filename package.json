@@ -18,6 +18,7 @@
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "serve": "node ./build/server.js",
+    "start:dev": "babel-node src/server.ts",
     "watch:server": "nodemon ./build/server.js",
     "watch:tsc": "tsc -w",
     "test": "jest",

@@ -26,8 +26,8 @@ export default class Users extends MongoDataSource<IUser> {
   //   return await this.findOneById(id);
   // }
 
-  // async addUser({username}: IUser) {
-  //   // @ts-ignore
-  //   return await this.model.create({username});
-  // }
+  async addUser({username}: IUser) {
+    // @ts-ignore
+    return await this.model.create({username});
+  }
 }
