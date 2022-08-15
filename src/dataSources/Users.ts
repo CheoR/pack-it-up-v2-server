@@ -1,26 +1,13 @@
 import { MongoDataSource } from "apollo-datasource-mongodb";
-import { Document, ObjectId } from 'mongodb';
-
-// interface UserDocument {
-//   _id: ObjectId
-//   username: string
-// }
-
-// type MongoObjectId = ObjectId;
-// type UUID = string;
-// type UserId = MongoObjectId | UUID;
-// interface IUser extends Document {
-//   username: String
-// }
+import { Document } from 'mongodb';
 interface IUser extends Document {
+  id: String
   username: String
 }
-
 export default class Users extends MongoDataSource<IUser> {
   async getUsers() {
     // @ts-ignore
     const resp = await this.model.find();
-    console.log('fetching all users');
     return resp;
   }
 
@@ -28,12 +15,14 @@ export default class Users extends MongoDataSource<IUser> {
   //   return await this.findOneById(id);
   // }
 
-  async addUser({input}: IUser) {
+  async addUser(input: IUser) {
+    const newUser = {
+      ...input,
+    }
+
     // @ts-ignore
-    const resp = await this.model.create({input});
-    console.log('input: ', input);
-    console.log('Users.ts');
-    // console.log(resp);
-    return resp; /// await this.model.create({input});
+    const resp = await this.model.create(newUser);
+
+    return resp;
   }
 }

@@ -10,7 +10,6 @@ import express from 'express';
 import mongoose from 'mongoose';
 import http from 'http';
 
-import { db } from './data/db';
 import Users from './dataSources/Users';
 import {User as UserModel} from './models/user';
 import { Query } from './resolvers/Query';
@@ -18,7 +17,7 @@ import { Mutation } from './resolvers/Mutation';
 import { typeDefs } from './schemas/schema';
 
 const URI = `${process.env.MONGO_URI}`;
-console.log('server.ts\nURI: ', URI);
+
 const dbConnection = async () => {
   await mongoose.connect(URI, {})
 };
@@ -44,7 +43,6 @@ async function startApolloServer() {
       ApolloServerPluginDrainHttpServer({ httpServer }),
       ApolloServerPluginLandingPageLocalDefault({ embed: true }),
     ],
-    context: { db },
     dataSources,
   });
 
