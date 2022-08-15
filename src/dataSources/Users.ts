@@ -19,15 +19,21 @@ interface IUser extends Document {
 export default class Users extends MongoDataSource<IUser> {
   async getUsers() {
     // @ts-ignore
-    return await this.model.find();
+    const resp = await this.model.find();
+    console.log('fetching all users');
+    return resp;
   }
 
   // async getUser(id: UserId) {
   //   return await this.findOneById(id);
   // }
 
-  async addUser({username}: IUser) {
+  async addUser({input}: IUser) {
     // @ts-ignore
-    return await this.model.create({username});
+    const resp = await this.model.create({input});
+    console.log('input: ', input);
+    console.log('Users.ts');
+    // console.log(resp);
+    return resp; /// await this.model.create({input});
   }
 }

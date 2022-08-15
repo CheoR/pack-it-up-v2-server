@@ -6,7 +6,8 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    addUser(input: UserInput!): User!
+    # addUser(input: UserInput!): User!
+    addUser(username: String!): User!
   }
 
   type User {
@@ -14,8 +15,8 @@ export const typeDefs = gql`
     username: String!
   }
 
-  input UserInput {
-    username: String!
-  }
+  # input UserInput {
+  #   username: String!
+  # }
 
 `;

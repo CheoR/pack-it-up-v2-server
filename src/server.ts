@@ -18,6 +18,7 @@ import { Mutation } from './resolvers/Mutation';
 import { typeDefs } from './schemas/schema';
 
 const URI = `${process.env.MONGO_URI}`;
+console.log('server.ts\nURI: ', URI);
 const dbConnection = async () => {
   await mongoose.connect(URI, {})
 };
