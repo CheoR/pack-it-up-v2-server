@@ -1,14 +1,12 @@
 import { model, Model, Schema } from "mongoose";
 export interface IUser {
-  id: string;
+  _id: Schema.Types.ObjectId;
   username: string;
 }
 
-// looks like this schema controls what gets evaluated
-// and sent to mongodb
 const UserSchema: Schema = new Schema<IUser>({
-  id: {
-    type: String,
+  _id: {
+    type: Schema.Types.ObjectId,
     required: true,
   },
   username: {

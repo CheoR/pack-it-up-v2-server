@@ -7,20 +7,14 @@ import {
 import { ApolloServer } from 'apollo-server-express';
 
 import express from 'express';
-import mongoose from 'mongoose';
 import http from 'http';
 
+import connectDB from './config/db';
 import Users from './dataSources/Users';
 import {User as UserModel} from './models/user';
 import { Query } from './resolvers/Query';
 import { Mutation } from './resolvers/Mutation';
 import { typeDefs } from './schemas/schema';
-
-const URI = `${process.env.MONGO_URI}`;
-
-const dbConnection = async () => {
-  await mongoose.connect(URI, {})
-};
 
 const dataSources = () => ({
   // @ts-ignore
@@ -58,7 +52,4 @@ async function startApolloServer() {
 
 startApolloServer();
 
-
-dbConnection()
-  .then(() => console.log('🎉 connected to database successfully'))
-  .catch(error => console.error('dbConnection Error: ', error));
+connectDB()
