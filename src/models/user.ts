@@ -7,7 +7,7 @@ export interface IUser {
 const UserSchema: Schema = new Schema<IUser>({
   _id: {
     // type: Schema.Types.ObjectId,
-     type: String,
+    type: String,
     required: true,
   },
   username: {

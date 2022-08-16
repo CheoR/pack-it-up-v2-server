@@ -12,14 +12,9 @@ export default class Users extends MongoDataSource<IUser> {
   }
 
   async getUser(_id: string) {
-    console.log('----- START Users.ts ---- ')
-    console.log('user _id: ', _id);
     try {
       const resp = await this.findOneById(_id);
-      console.log('resp');
-      console.log(resp);
-      console.log('----- END Users.ts ---- ')
-      
+
       return resp;
     } catch(error: unknown) {
       return new Error("Users.ts User Not Found");

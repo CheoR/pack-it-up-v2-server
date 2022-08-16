@@ -10,14 +10,8 @@ export const Mutation = {
       username,
     }
 
-    console.log('---- STATRT Mutations.ts ----');
-    console.log('username: ', username);
-    console.log('newUser');
-    console.log(newUser);
     try {
-
       const resp = await users.addUser(newUser);
-      console.log('---- END Mutations.ts ----');
       return resp;
     } catch (error: unknown) {
       return new Error('Mutation.ts error - could not make new user ');
