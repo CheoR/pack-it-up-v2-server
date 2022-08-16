@@ -14,7 +14,7 @@ import Users from './dataSources/Users';
 import {User as UserModel} from './models/user';
 import { Query } from './resolvers/Query';
 import { Mutation } from './resolvers/Mutation';
-import { typeDefs } from './schemas/schema';
+import { typeDefs } from './schemas/typeDefs';
 
 const dataSources = () => ({
   // @ts-ignore
