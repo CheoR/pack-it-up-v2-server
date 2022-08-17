@@ -1,7 +1,7 @@
-import { model, Model, Schema } from "mongoose";
+import { model, Model, Schema } from 'mongoose'
 export interface IUser {
-  _id: Schema.Types.ObjectId;
-  username: string;
+  _id: Schema.Types.ObjectId
+  username: string
 }
 
 const UserSchema: Schema = new Schema<IUser>({
@@ -13,7 +13,7 @@ const UserSchema: Schema = new Schema<IUser>({
   username: {
     type: String,
     required: true,
-  }
-});
+  },
+})
 
-export const User: Model<IUser> = model<IUser>('User', UserSchema);
+export const User: Model<IUser> = model<IUser>('User', UserSchema)

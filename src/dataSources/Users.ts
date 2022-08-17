@@ -1,5 +1,5 @@
-import { MongoDataSource } from "apollo-datasource-mongodb";
-import { Document } from 'mongodb';
+import { MongoDataSource } from 'apollo-datasource-mongodb'
+import { Document } from 'mongodb'
 interface IUser extends Document {
   _id: String
   username: String
@@ -7,17 +7,17 @@ interface IUser extends Document {
 export default class Users extends MongoDataSource<IUser> {
   async getUsers() {
     // @ts-ignore
-    const resp = await this.model.find();
-    return resp;
+    const resp = await this.model.find()
+    return resp
   }
 
   async getUser(_id: string) {
     try {
-      const resp = await this.findOneById(_id);
+      const resp = await this.findOneById(_id)
 
-      return resp;
-    } catch(error: unknown) {
-      return new Error("Users.ts User Not Found");
+      return resp
+    } catch (error: unknown) {
+      return new Error('Users.ts User Not Found')
     }
   }
 
@@ -27,8 +27,8 @@ export default class Users extends MongoDataSource<IUser> {
     }
 
     // @ts-ignore
-    const resp = await this.model.create(newUser);
+    const resp = await this.model.create(newUser)
 
-    return resp;
+    return resp
   }
 }

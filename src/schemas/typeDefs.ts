@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-express';
+import { gql } from 'apollo-server-express'
 
 export const typeDefs = gql`
   type Query {
@@ -22,5 +22,4 @@ export const typeDefs = gql`
   input UserIdInput {
     _id: ID!
   }
-
-`;
+`
