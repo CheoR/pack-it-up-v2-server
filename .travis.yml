@@ -6,7 +6,7 @@ language: node_js
 
 node_js:
   - lts/*
-  - node
+  - 17
 
 script:
   - yarn lint
