@@ -25,6 +25,7 @@ const dataSources = () => ({
 async function startApolloServer() {
   const app = express()
   const httpServer = http.createServer(app)
+  const PORT = process.env.PORT || 4000
 
   const server = new ApolloServer({
     typeDefs,
@@ -48,9 +49,10 @@ async function startApolloServer() {
   })
 
   await new Promise<void>((resolve) =>
-    httpServer.listen({ port: 4000 }, resolve),
+    httpServer.listen({ port: PORT }, resolve),
   )
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+  console.log(`
+  🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
 }
 
 startApolloServer()

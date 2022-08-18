@@ -17,7 +17,7 @@
     "dev": "tsc && concurrently \"tsc -w\" \"nodemon build/server.js\"",
     "dev2": "yarn run build && yarn run serve",
     "dev3": "nodemon --ext ts --exec 'yarn build --incremental && yarn serve'",
-    "build": "tsc --build -p tsconfig.build.json",
+    "build": "tsc --build tsconfig.build.json ",
     "clean": "tsc --build --clean",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
