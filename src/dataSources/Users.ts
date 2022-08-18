@@ -1,12 +1,12 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
-import { Document } from 'mongodb'
+import { Document } from 'mongoose'
+
 interface IUser extends Document {
-  _id: String
-  username: String
+  _id: string
+  username: string
 }
 export default class Users extends MongoDataSource<IUser> {
   async getUsers() {
-    // @ts-ignore
     const resp = await this.model.find()
     return resp
   }
@@ -22,12 +22,7 @@ export default class Users extends MongoDataSource<IUser> {
   }
 
   async addUser(input: IUser) {
-    const newUser = {
-      ...input,
-    }
-
-    // @ts-ignore
-    const resp = await this.model.create(newUser)
+    const resp = await this.model.create(input)
 
     return resp
   }

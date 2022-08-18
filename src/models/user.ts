@@ -1,13 +1,14 @@
 import { model, Model, Schema } from 'mongoose'
+import { v4 as uuid } from 'uuid'
 export interface IUser {
-  _id: Schema.Types.ObjectId
+  _id: string
   username: string
 }
 
 const UserSchema: Schema = new Schema<IUser>({
   _id: {
-    // type: Schema.Types.ObjectId,
     type: String,
+    default: uuid,
     required: true,
   },
   username: {
