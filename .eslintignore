@@ -1,4 +1,9 @@
 node_modules
 build
+coverage
+
+jest.config.ts
+.eslint.js
+
 *.svg
 *.css

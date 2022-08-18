@@ -300,3 +300,6 @@ venv.bak/
 
 # gatsby
 public
+
+# typescript
+tsconfig.tsbuildinfo
