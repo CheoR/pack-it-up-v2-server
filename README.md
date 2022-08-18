@@ -25,6 +25,8 @@ Users can track what they pack.
 
 [V2 GitHub - Backend]()
 
+[![Build Status](https://app.travis-ci.com/CheoR/pack-it-up-v2-server.svg?branch=main)](https://app.travis-ci.com/CheoR/pack-it-up-v2-server)
+
 ## Frontend
 
 - react-native
