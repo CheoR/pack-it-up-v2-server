@@ -1,0 +1,12 @@
+sudo: false
+
+dist: xenial
+
+language: node_js
+
+node_js:
+  - lts/*
+  - node
+
+script:
+  - yarn lint
