@@ -29,5 +29,6 @@ module.exports = {
   },
   rules: {
     'prettier/prettier': 2,
+    '@typescript-eslint/ban-ts-comment': 'off',
   },
 }

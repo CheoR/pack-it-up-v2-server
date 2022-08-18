@@ -1,5 +1,5 @@
 export const Mutation = {
-  // @ts-ignore
+  // @ts-ignore: Make type
   async addUser(parent, { input: { username } }, { dataSources: { users } }) {
     try {
       const resp = await users.addUser({ username })

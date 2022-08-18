@@ -18,7 +18,7 @@ import { Mutation } from './resolvers/Mutation'
 import { typeDefs } from './schemas/typeDefs'
 
 const dataSources = () => ({
-  // @ts-ignore
+  // @ts-ignore: Need suitable types
   users: new Users(UserModel),
 })
 
