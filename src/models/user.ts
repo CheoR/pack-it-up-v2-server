@@ -1,9 +1,6 @@
 import { model, Model, Schema } from 'mongoose'
 import { v4 as uuid } from 'uuid'
-export interface IUser {
-  _id: string
-  username: string
-}
+import { IUser } from '../types/user'
 
 const UserSchema: Schema = new Schema<IUser>({
   _id: {

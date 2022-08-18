@@ -1,10 +1,5 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
-import { Document } from 'mongoose'
-
-interface IUser extends Document {
-  _id: string
-  username: string
-}
+import { IUser } from '../types/user'
 export default class Users extends MongoDataSource<IUser> {
   async getUsers() {
     const resp = await this.model.find()
