@@ -1,5 +1,5 @@
 const config = {
-  URI: `${process.env.MONGO_URI}`,
+  URI: `${process.env.MONGODB_URI}`,
 }
 
 export default config
