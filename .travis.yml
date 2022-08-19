@@ -8,5 +8,8 @@ node_js:
   - lts/*
   - 17
 
+install:
+  - yarn install
+
 script:
   - yarn lint
