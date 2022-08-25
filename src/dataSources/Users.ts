@@ -17,8 +17,11 @@ export default class Users extends MongoDataSource<IUser> {
   }
 
   async addUser(input: IUser) {
-    const resp = await this.model.create(input)
-
-    return resp
+    try {
+      const resp = await this.model.create(input)
+      return resp
+    } catch (error: unknown) {
+      return new Error('Could not create user because of some reason')
+    }
   }
 }

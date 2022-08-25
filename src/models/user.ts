@@ -10,7 +10,19 @@ const UserSchema: Schema = new Schema<IUser>({
   },
   username: {
     type: String,
+    unique: true,
+    minLength: [6, 'Must be at least 6 characters'],
+    lowercase: true,
+    trim: true,
     required: true,
+    // match:
+    // validate: {
+    //   validator: function (v: string): boolean {
+    //     return v.length < 6
+    //   },
+    //   message: (props) => `${props.value}
+    //   is not a valid phone number!`,
+    // },
   },
 })
 
