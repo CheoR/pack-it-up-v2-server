@@ -29,29 +29,9 @@ export default class Users extends MongoDataSource<IUser> {
       return resp
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.log(
-          `dataources/Users.ts IF error instance of error: `,
-          error instanceof Error,
-        )
-        console.log('\n-------------')
-        console.log(error)
-        console.log(error.message)
-        console.log('\n-------------')
-        // return {
-        //   message: `if dataSources/Users.ts Create Error: ${error.message}`,
-        // }
-        throw new Error('moo cow')
+        throw new Error('Could not create user')
       } else {
-        console.log(
-          `dataources/Users.ts ELSE error instance of error: `,
-          error instanceof Error,
-        )
-        console.log(error)
-        console.log('typeof error: ', typeof error)
-        return {
-          message:
-            'dataources/Users.ts else dataSources/Users.ts addUser: something went wrong',
-        }
+        throw new Error('Coult not create user - other than Error')
       }
     }
   }
