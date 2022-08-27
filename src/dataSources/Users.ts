@@ -35,4 +35,29 @@ export default class Users extends MongoDataSource<IUser> {
       }
     }
   }
+
+  async removeUser(
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    { input: { _id } },
+    // @ts-ignore: Make type
+    { dataSources: { users } },
+  ): Promise<IUser | UserError> {
+    try {
+      // console.log('dataSources/Users.ts remove user _id', _id)
+      // console.log('dataSources/Users.ts user ')
+      // console.log(users)
+      const resp = await this.model.remove({ _id })
+      // console.log('dataSources/Users.ts resp')
+      // console.log(resp)
+      return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(error.message)
+      } else {
+        throw new Error('removeUser Unknown error')
+      }
+    }
+  }
 }
