@@ -1,4 +1,5 @@
 import { IUser, UserError } from '../types/user'
+import { DeleteResponse } from '../types/utils'
 
 export const Mutation = {
   // @ts-ignore: Make type
@@ -32,23 +33,15 @@ export const Mutation = {
     { input: { _id } },
     // @ts-ignore: Make type
     { dataSources: { users } },
-  ): Promise<IUser | UserError> {
+  ): Promise<DeleteResponse | UserError> {
     try {
-      console.log('resolvers/Mutations.ts remove user _id', _id)
-      // console.log('user: ')
-      // console.log(users)
-      const resp = await users.removeUser({ _id })
-      console.log('resolvers/Mutations.ts resp')
-      console.log(resp)
-      return resp
+      await users.removeUser(_id)
+      return { ok: true }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.log('resolvers/Mutations.ts remove user _id ERROR')
-        console.log('errors')
-        console.log(error.message)
-        throw new Error(`resolvers/Mutations.ts error: ${error.message}`)
+        return error
       } else {
-        throw new Error('removeUser Unknown error')
+        throw new Error(`Mutation error: ${error}`)
       }
     }
   },

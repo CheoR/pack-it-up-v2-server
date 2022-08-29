@@ -1,5 +1,5 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
-import { IUser, UserError } from '../types/user'
+import { IUser, UserError, ErrorMessages } from '../types/user'
 export default class Users extends MongoDataSource<IUser> {
   async getUsers() {
     const resp = await this.model.find()
@@ -18,7 +18,7 @@ export default class Users extends MongoDataSource<IUser> {
           dataSources/Users.ts User Not Found: ${error.message}`),
         }
       } else {
-        console.log('dataSources error: ', error)
+        throw new Error(`dataSources error: ${error}`)
       }
     }
   }
@@ -36,27 +36,21 @@ export default class Users extends MongoDataSource<IUser> {
     }
   }
 
-  async removeUser(
-    // @ts-ignore: Make type
-    parent,
-    // @ts-ignore: Make type
-    { input: { _id } },
-    // @ts-ignore: Make type
-    { dataSources: { users } },
-  ): Promise<IUser | UserError> {
+  async removeUser(_id: string) {
     try {
-      // console.log('dataSources/Users.ts remove user _id', _id)
-      // console.log('dataSources/Users.ts user ')
-      // console.log(users)
-      const resp = await this.model.remove({ _id })
-      // console.log('dataSources/Users.ts resp')
-      // console.log(resp)
-      return resp
+      const resp = await this.model.deleteOne({ _id })
+      // even if user does not exist
+      // would not throw error because deletedCount is just 0
+      if (resp.deletedCount) {
+        return resp
+      } else {
+        throw new Error(ErrorMessages.DeleteError)
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(error.message)
+        throw new Error(ErrorMessages.DeleteError)
       } else {
-        throw new Error('removeUser Unknown error')
+        throw new Error(`dataSources error: ${error}`)
       }
     }
   }
