@@ -1,5 +1,5 @@
 import { IUser, UserError } from '../types/user'
-import { DeleteResponse } from '../types/utils'
+import { DeleteResponse, UpdateResponse } from '../types/utils'
 
 export const Mutation = {
   // @ts-ignore: Make type
@@ -36,6 +36,25 @@ export const Mutation = {
   ): Promise<DeleteResponse | UserError> {
     try {
       await users.removeUser(_id)
+      return { ok: true }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return error
+      } else {
+        throw new Error(`Mutation error: ${error}`)
+      }
+    }
+  },
+  async updateUser(
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    { input: { _id }, update },
+    // @ts-ignore: Make type
+    { dataSources: { users } },
+  ): Promise<UpdateResponse | UserError> {
+    try {
+      await users.updateUser(_id, update)
       return { ok: true }
     } catch (error: unknown) {
       if (error instanceof Error) {

@@ -54,4 +54,22 @@ export default class Users extends MongoDataSource<IUser> {
       }
     }
   }
+
+  async updateUser(_id: string, update: { username: string }) {
+    try {
+      // TODO: improve schema for empty strings
+      if (!update.username) {
+        throw new Error('No Empty Strings')
+      }
+      const resp = await this.model.findOneAndUpdate({ _id }, update)
+
+      return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(ErrorMessages.UpdateError)
+      } else {
+        throw new Error(`dataSources error: ${error}`)
+      }
+    }
+  }
 }

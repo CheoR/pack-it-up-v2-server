@@ -9,6 +9,7 @@ export const typeDefs = gql`
   type Mutation {
     addUser(input: UserInput!): User
     removeUser(input: UserIdInput!): DeleteResponse
+    updateUser(input: UserIdInput!, update: UserUpdateInput): UpdateResponse
   }
 
   type User {
@@ -19,11 +20,20 @@ export const typeDefs = gql`
   type DeleteResponse {
     ok: Boolean!
   }
+
+  type UpdateResponse {
+    ok: Boolean!
+  }
+
   input UserInput {
     username: String!
   }
 
   input UserIdInput {
     _id: ID!
+  }
+
+  input UserUpdateInput {
+    username: String!
   }
 `
