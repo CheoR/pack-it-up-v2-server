@@ -23,7 +23,7 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "prepare": "husky install",
     "prettier:format": "prettier --config .prettierrc 'src/**/*.ts' --write",
-    "start": "yarn build && node ./build/server.js",
+    "start": "node ./build/server.js",
     "start:dev": "babel-node src/server.ts",
     "test": "jest --config jest.config.ts ./src/__test__",
     "watch:node": "nodemon",
