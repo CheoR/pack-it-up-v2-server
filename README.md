@@ -40,3 +40,4 @@ Users can track what they pack.
 - appollo-server-express
 - Cypress
 - TypeScript
+- Bcryptjs
