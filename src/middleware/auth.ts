@@ -8,10 +8,9 @@ export const auth = (context: any) => {
 
   if (authHeader) {
     const token = authHeader.split('Bearer')[1]
-
     if (token) {
       try {
-        const secret = process.env.JWT_SECRET
+        const secret = process.env.JWT_SECRET as string
         const user = jwt.verify(token, secret)
         return user
       } catch (error) {
