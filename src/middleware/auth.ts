@@ -11,7 +11,8 @@ export const auth = (context: any) => {
 
     if (token) {
       try {
-        const user = jwt.verify(token, 'UNSAFE_STRING')
+        const secret = process.env.JWT_SECRET
+        const user = jwt.verify(token, secret)
         return user
       } catch (error) {
         throw new AuthenticationError('Invalid/Expired Token')
