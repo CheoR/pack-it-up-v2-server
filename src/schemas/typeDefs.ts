@@ -7,7 +7,6 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    addUser(input: UserInput!): User
     registerUser(input: RegisterUserInput!): User
     loginUser(input: LoginUserInput!): User
     removeUser(input: UserIdInput!): DeleteResponse
@@ -28,10 +27,6 @@ export const typeDefs = gql`
 
   type UpdateResponse {
     ok: Boolean!
-  }
-
-  input UserInput {
-    username: String!
   }
 
   input UserIdInput {
