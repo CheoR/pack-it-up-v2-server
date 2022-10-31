@@ -36,6 +36,19 @@ export default class Users extends MongoDataSource<IUser> {
     }
   }
 
+  async registerUser(input: IUser): Promise<IUser | UserError> {
+    try {
+      const resp = await this.model.create(input)
+      return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error('Could not create user')
+      } else {
+        throw new Error('Coult not create user - other than Error')
+      }
+    }
+  }
+
   async removeUser(_id: string) {
     try {
       const resp = await this.model.deleteOne({ _id })

@@ -8,6 +8,7 @@ export const typeDefs = gql`
 
   type Mutation {
     addUser(input: UserInput!): User
+    registerUser(input: RegisterUserInput!): User
     removeUser(input: UserIdInput!): DeleteResponse
     updateUser(input: UserIdInput!, update: UserUpdateInput): UpdateResponse
   }
@@ -35,5 +36,11 @@ export const typeDefs = gql`
 
   input UserUpdateInput {
     username: String!
+  }
+
+  input RegisterUserInput {
+    username: String!
+    email: String!
+    password: String!
   }
 `
