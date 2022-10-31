@@ -7,6 +7,10 @@ export interface IUser extends Document {
   password: string
   token: string
 }
+export interface ILoginUser extends Document {
+  email: string
+  password: string
+}
 
 export type UserError = {
   message: string | ErrorMessages

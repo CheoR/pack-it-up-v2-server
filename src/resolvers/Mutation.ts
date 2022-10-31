@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 import { DeleteResponse, UpdateResponse } from '../types/utils'
-import { ErrorMessages, IUser, UserError } from '../types/user'
+import { ErrorMessages, ILoginUser, IUser, UserError } from '../types/user'
 import { User } from '../models/user'
 
 const SALT = 10
@@ -21,6 +21,51 @@ export const Mutation = {
     try {
       const resp = await users.addUser({ username })
       return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(error.message)
+      } else {
+        return {
+          message:
+            'Resolvers Mutation.ts Mutation addUser: something went wrong',
+        }
+      }
+    }
+  },
+
+  async loginUser(
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    { input: { email, password } },
+  ): Promise<ILoginUser | UserError> {
+    try {
+      const user = await User.findOne({ email })
+
+      if (user && (await bcrypt.compare(password, user.password))) {
+        // Typecasting needed to overcome error.
+        // No overload matches this call.
+        const secret = process.env.JWT_SECRET as string
+        const token = jwt.sign(
+          {
+            user_id: user._id,
+            email,
+          },
+          secret,
+          {
+            expiresIn: '2 days',
+          },
+        )
+
+        user.token = token
+
+        return user
+      } else {
+        throw new ApolloError(
+          'Email/Password do not match',
+          ErrorMessages.ReadError,
+        )
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw new Error(error.message)
@@ -58,20 +103,20 @@ export const Mutation = {
     })
 
     try {
-      const resp = await users.registerUser(newUser)
-
+      const secret = process.env.JWT_SECRET as string
       const token = jwt.sign(
         {
           user_id: newUser._id,
           email,
         },
-        'UNSAFE_STRING',
+        secret,
         {
           expiresIn: '2 days',
         },
       )
+      newUser.token = token
 
-      resp.token = token
+      const resp = await users.registerUser(newUser)
 
       return resp
     } catch (error: unknown) {
