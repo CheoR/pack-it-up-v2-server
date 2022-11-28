@@ -23,6 +23,8 @@ Users can track what they pack.
 
 [V2 GitHub - Frontend]()
 
+![WireFrame-LowFidelity](https://user-images.githubusercontent.com/5026476/204304673-17fc44b0-ad62-41ba-bbaf-3783b3c4f8f9.png)
+
 [V2 GitHub - Backend]()
 
 [![Build Status](https://app.travis-ci.com/CheoR/pack-it-up-v2-server.svg?branch=main)](https://app.travis-ci.com/CheoR/pack-it-up-v2-server)
