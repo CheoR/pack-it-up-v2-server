@@ -23,8 +23,9 @@ Users can track what they pack.
 
 [V2 GitHub - Frontend]()
 
-![PackItUp-Wireframe-LowFidelity-V2_](https://user-images.githubusercontent.com/5026476/205509323-37de958e-4546-41bf-baad-5febcf8a1238.png)
-![PackItUp-Wireframe-MidFidelity-V2](https://user-images.githubusercontent.com/5026476/205410105-e90033cb-efdd-40df-86bb-153f0c461293.png)
+![PackItUp-Wireframe-LowFidelity-V2](https://user-images.githubusercontent.com/5026476/205509436-af02eb34-f84b-495f-8ea4-c0715247ca23.png)
+![PackItUp-Wireframe-MidFidelity-V2](https://user-images.githubusercontent.com/5026476/205509401-57b260cd-9e75-48dd-82c8-cd543bfa5614.png)
+
 
 [V2 GitHub - Backend]()
 
