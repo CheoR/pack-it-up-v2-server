@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "main": "./src/server.js",
-  "description": "Personal Portfolio redone with Gatsby",
+  "description": "PackItUp server",
   "author": "CheoR <cheo.roman+github@gmail.com>",
   "license": "MIT",
   "keywords": [
