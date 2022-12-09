@@ -72,8 +72,8 @@ export const Mutation = {
       )
     }
 
-    const SALT = process.env.SALT as unknown as number
-    const encrypted = await bcrypt.hash(password, SALT)
+    const SALT = process.env.SALT as unknown as string
+    const encrypted = await bcrypt.hash(password, parseInt(SALT, 10))
     const newUser = new User({
       email: email.toLowerCase(),
       firstName: firstName.toLowerCase(),
