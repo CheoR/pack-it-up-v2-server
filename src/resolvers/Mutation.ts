@@ -6,7 +6,6 @@ import { DeleteResponse, UpdateResponse } from '../types/utils'
 import { ErrorMessages, ILoginUser, IUser, UserError } from '../types/user'
 import { User } from '../models/user'
 
-const SALT = 10
 
 export const Mutation = {
   async loginUser(
@@ -58,23 +57,28 @@ export const Mutation = {
     // @ts-ignore: Make type
     parent,
     // @ts-ignore: Make type
-    { input: { username, email, password } },
+    { input: { email, firstName, lastName, password, username } },
     // @ts-ignore: Make type
     { dataSources: { users } },
   ): Promise<IUser | UserError> {
     const oldUser = await User.findOne({ email })
 
     if (oldUser) {
+      // TODO: replace error message
+      // something like: could not crate user.
       throw new ApolloError(
-        `${email} already in use.`,
+        `${ErrorMessages.CreateError} - ${email} already in use.`,
         ErrorMessages.CreateError,
       )
     }
 
+    const SALT = process.env.SALT as unknown as number
     const encrypted = await bcrypt.hash(password, SALT)
     const newUser = new User({
-      username: username.toLowerCase(),
       email: email.toLowerCase(),
+      firstName: firstName.toLowerCase(),
+      lastName: lastName.toLowerCase(),
+      username: username.toLowerCase(),
       password: encrypted,
     })
 
@@ -84,6 +88,9 @@ export const Mutation = {
         {
           user_id: newUser._id,
           email,
+          firstName,
+          lastName,
+          username,
         },
         secret,
         {

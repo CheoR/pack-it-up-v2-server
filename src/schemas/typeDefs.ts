@@ -38,9 +38,11 @@ export const typeDefs = gql`
   }
 
   input RegisterUserInput {
-    username: String!
     email: String!
+    firstName: String!
+    lastName: String!
     password: String!
+    username: String!
   }
 
   input LoginUserInput {

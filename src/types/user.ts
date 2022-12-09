@@ -2,9 +2,11 @@ import { Document } from 'mongoose'
 
 export interface IUser extends Document {
   _id: string
-  username: string
   email: string
+  firstName: string
+  lastName: string
   password: string
+  username: string
   token: string
 }
 export interface ILoginUser extends Document {
@@ -18,8 +20,8 @@ export type UserError = {
 }
 
 export const enum ErrorMessages {
-  DBError = 'error occurred while dealing with db',
-  ServerError = 'error occurred while dealing with db',
+  DBError = 'Error occurred while dealing with db',
+  ServerError = 'Error occurred while dealing with db',
   CreateError = 'Could not add user',
   ReadError = 'Could not fetch user',
   UpdateError = 'Could not update user',

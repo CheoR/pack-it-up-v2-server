@@ -14,6 +14,35 @@ const UserSchema: Schema = new Schema<IUser>({
     default: uuid,
     required: true,
   },
+  email: {
+    type: String,
+    trim: true,
+    lowercase: true,
+    unique: true,
+    required: true,
+    validate: [validateEmail, 'Please fill a valid email address'],
+    // match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+  },
+  firstName: {
+    type: String,
+    trim: true,
+    lowercase: true,
+    required: true,
+    minLength: [2, 'Must be at least 2 characters'],
+  },
+  lastName: {
+    type: String,
+    trim: true,
+    lowercase: true,
+    required: true,
+    minLength: [2, 'Must be at least 2 characters'],
+  },
+  password: {
+    type: String,
+  },
+  token: {
+    type: String,
+  },
   username: {
     type: String,
     unique: true,
@@ -29,21 +58,6 @@ const UserSchema: Schema = new Schema<IUser>({
     //   message: (props) => `${props.value}
     //   is not a valid phone number!`,
     // },
-  },
-  email: {
-    type: String,
-    trim: true,
-    lowercase: true,
-    unique: true,
-    required: true,
-    validate: [validateEmail, 'Please fill a valid email address'],
-    // match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
-  },
-  password: {
-    type: String,
-  },
-  token: {
-    type: String,
   },
 })
 
