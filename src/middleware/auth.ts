@@ -1,4 +1,4 @@
-import { AuthenticationError } from 'apollo-server-core'
+import { ApolloServerErrorCode } from '@apollo/server/errors'
 import jwt from 'jsonwebtoken'
 
 // TODO: replace any
@@ -14,7 +14,7 @@ export const auth = (context: any) => {
         const user = jwt.verify(token, secret)
         return user
       } catch (error) {
-        throw new AuthenticationError('Invalid/Expired Token')
+        throw ApolloServerErrorCode.GRAPHQL_VALIDATION_FAILED
       }
     }
     throw new Error('Authorization token must be "Bearer [token]"')

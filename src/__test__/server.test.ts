@@ -1,7 +1,7 @@
-import { ApolloServer, gql } from 'apollo-server-express'
+import { ApolloServer } from '@apollo/server'
 // For clarity in this example we included our typeDefs and resolvers above our test,
 // but in a real world situation you'd be importing these in from different files
-const typeDefs = gql`
+const typeDefs = `#graphql
   type Query {
     hello(name: String): String!
   }
