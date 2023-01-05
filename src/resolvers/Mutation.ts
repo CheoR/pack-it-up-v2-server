@@ -59,7 +59,7 @@ export const Mutation = {
     // @ts-ignore: Make type
     { input: { email, firstName, lastName, password, username } },
     // @ts-ignore: Make type
-    { dataSources: { users } },
+    { dataSources: { usersAPI } },
   ): Promise<IUser | UserError> {
     const oldUser = await User.findOne({ email })
 
@@ -99,7 +99,7 @@ export const Mutation = {
       )
       newUser.token = token
 
-      const resp = await users.registerUser(newUser)
+      const resp = await usersAPI.registerUser(newUser)
 
       return resp
     } catch (error: unknown) {
@@ -120,10 +120,10 @@ export const Mutation = {
     // @ts-ignore: Make type
     { input: { _id } },
     // @ts-ignore: Make type
-    { dataSources: { users } },
+    { dataSources: { usersAPI } },
   ): Promise<DeleteResponse | UserError> {
     try {
-      await users.removeUser(_id)
+      await usersAPI.removeUser(_id)
       return { ok: true }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -139,10 +139,10 @@ export const Mutation = {
     // @ts-ignore: Make type
     { input: { _id }, update },
     // @ts-ignore: Make type
-    { dataSources: { users } },
+    { dataSources: { usersAPI } },
   ): Promise<UpdateResponse | UserError> {
     try {
-      await users.updateUser(_id, update)
+      await usersAPI.updateUser(_id, update)
       return { ok: true }
     } catch (error: unknown) {
       if (error instanceof Error) {

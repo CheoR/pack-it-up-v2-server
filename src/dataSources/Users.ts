@@ -1,6 +1,6 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { IUser, UserError, ErrorMessages } from '../types/user'
-export default class Users extends MongoDataSource<IUser> {
+export default class UsersAPI extends MongoDataSource<IUser> {
   async getUsers() {
     const resp = await this.model.find()
     return resp

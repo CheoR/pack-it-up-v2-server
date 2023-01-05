@@ -1,12 +1,19 @@
 export const Query = {
   // @ts-ignore: Make type
-  users: async (parent, args, { dataSources: { users } }) => {
-    return users.getUsers()
+  users: async (parent, args, { dataSources: { usersAPI } }) => {
+    return usersAPI.getUsers()
   },
   // @ts-ignore: Make type
-  getUser: async (parent, { input: { _id } }, { dataSources: { users } }) => {
+  getUser: async (
+    // @ts-ignore: Make type
+      parent,
+      // @ts-ignore: Make type
+      { input: { _id } },
+      // @ts-ignore: Make type
+      { dataSources: { usersAPI } }
+    ) => {
     try {
-      const resp = await users.getUser(_id)
+      const resp = await usersAPI.getUser(_id)
       return resp
     } catch (error: unknown) {
       return new Error('Query.ts User not found')

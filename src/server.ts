@@ -5,7 +5,7 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServer } from '@apollo/server'
 import { json } from 'body-parser'
-import express from 'express'
+import express, { Express } from 'express'
 import cors from 'cors'
 import http from 'http'
 
@@ -13,29 +13,27 @@ import { User as UserModel } from './models/user'
 import { Mutation } from './resolvers/Mutation'
 import { typeDefs } from './schemas/typeDefs'
 import { Query } from './resolvers/Query'
-import Users from './dataSources/Users'
+import UsersAPI from './dataSources/Users'
 import connectDB from './config/db'
 
-
-interface AppContextValue {
-  token?: string
-  dataSources: {
-    users: Users
+export interface AppContext {
+  token?: string | undefined
+  dataSources?: {
+    usersAPI: UsersAPI
   }
 }
 
-interface ContextParams {
-  req: express.Request
-  res?: express.Request
-}
+// interface ContextParams {
+//   req: express.Request
+//   res?: express.Request
+// }
 
 const DEFAULT_PORT = 4000
 
 async function startApolloServer() {
-  const app = express()
+  const app: Express = express()
   const httpServer = http.createServer(app)
-
-  const server = new ApolloServer<AppContextValue>({
+  const server = new ApolloServer<AppContext>({
     typeDefs,
     resolvers: {
       Query,
@@ -51,15 +49,25 @@ async function startApolloServer() {
     cors<cors.CorsRequest>(),
     json(),
     expressMiddleware(server, {
-      context: async <ContextParams>({ req }) => {
+      context: async ({ req }) => {
+        const token = req.headers.token
         return {
-          token: req.headers.token,
+          token,
           dataSources: {
-            users: new Users(UserModel),
+            usersAPI: new UsersAPI(UserModel),
           },
         }
       },
     }),
+    // @ ts-ignore
+    // expressMiddleware(server, {
+    //   context: async ({ req, res }) => ({
+    //     token: req.headers.token,
+    //     dataSources: {
+    //       users: new Users(UserModel),
+    //     },
+    //   }),
+    // }),
   )
 
   await new Promise<void>((resolve) =>
