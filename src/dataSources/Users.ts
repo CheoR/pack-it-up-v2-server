@@ -1,6 +1,13 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { IUser, UserError, ErrorMessages } from '../types/user'
 export default class UsersAPI extends MongoDataSource<IUser> {
+  // @ts-ignore
+  constructor({ collection, cache }) {
+    super(collection)
+    // @ts-ignore
+    super.initialize({ context: this.context, cache })
+  }
+
   async getUsers() {
     const resp = await this.model.find()
     return resp
@@ -9,7 +16,6 @@ export default class UsersAPI extends MongoDataSource<IUser> {
   async getUser(_id: string) {
     try {
       const resp = await this.findOneById(_id)
-
       return resp
     } catch (error: unknown) {
       if (error instanceof Error) {

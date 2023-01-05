@@ -51,23 +51,15 @@ async function startApolloServer() {
     expressMiddleware(server, {
       context: async ({ req }) => {
         const token = req.headers.token
+        const { cache } = server
         return {
           token,
           dataSources: {
-            usersAPI: new UsersAPI(UserModel),
+            usersAPI: new UsersAPI({ collection: UserModel, cache }),
           },
         }
       },
     }),
-    // @ ts-ignore
-    // expressMiddleware(server, {
-    //   context: async ({ req, res }) => ({
-    //     token: req.headers.token,
-    //     dataSources: {
-    //       users: new Users(UserModel),
-    //     },
-    //   }),
-    // }),
   )
 
   await new Promise<void>((resolve) =>
