@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken'
 import { DeleteResponse, UpdateResponse } from '../types/utils'
 import { ErrorMessages, ILoginUser, IUser, UserError } from '../types/user'
 import { User } from '../models/user'
+import { IMove, MoveError } from '../types/move'
+import { Move } from '../models/move'
 
 
 export const Mutation = {
@@ -48,6 +50,37 @@ export const Mutation = {
         return {
           message:
             'Resolvers Mutation.ts Mutation loginUser: something went wrong',
+        }
+      }
+    }
+  },
+
+  async createMove(
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    { input: { name, description, user_id } },
+    // @ts-ignore: Make type
+    { dataSources: { movesAPI } },
+  ): Promise<IMove | MoveError> {
+    console.log(`Mutation MOVES input: \nname: ${name}\n${description}\nuse_id: ${user_id}`)
+
+    const newMove = new Move({
+      name: name.toLowerCase(),
+      description: description?.toLowerCase(),
+      user_id,
+    })
+
+    try {
+      const resp = await movesAPI.createMove(newMove)
+      return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(error.message)
+      } else {
+        return {
+          message:
+            'Resolvers Mutation.ts Mutation createMOve: something went wrong',
         }
       }
     }
