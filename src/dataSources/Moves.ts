@@ -25,4 +25,24 @@ export default class MovesAPI extends MongoDataSource<IMove> {
     const resp = await this.model.find({ user_id: id }).exec()
     return resp
   }
+
+  async updateMove(
+    _id: string,
+    update: {
+      description?: string
+      name?: string
+    },
+  ) {
+    try {
+      const resp = await this.model.findOneAndUpdate({ _id }, update)
+
+      return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(ErrorMessages.UpdateError)
+      } else {
+        throw new Error(`dataSources error: ${error}`)
+      }
+    }
+  }
 }

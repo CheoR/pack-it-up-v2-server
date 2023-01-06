@@ -12,6 +12,7 @@ export const typeDefs = `#graphql
     registerUser(input: RegisterUserInput!): User
     loginUser(input: LoginUserInput!): User
     removeUser(input: UserIdInput!): DeleteResponse
+    updateMove(input: MoveIdInput!, update: MoveUpdateInput): UpdateResponse
     updateUser(input: UserIdInput!, update: UserUpdateInput): UpdateResponse
   }
 
@@ -50,6 +51,15 @@ export const typeDefs = `#graphql
 
   input UserIdInput {
     _id: ID!
+  }
+
+  input MoveIdInput {
+    _id: ID!
+  }
+
+  input MoveUpdateInput {
+    description: String
+    name: String
   }
 
   input UserUpdateInput {

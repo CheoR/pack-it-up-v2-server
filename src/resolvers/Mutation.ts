@@ -182,4 +182,23 @@ export const Mutation = {
       }
     }
   },
+  async updateMove(
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    { input: { _id }, update },
+    // @ts-ignore: Make type
+    { dataSources: { movesAPI } },
+  ): Promise<UpdateResponse | MoveError> {
+    try {
+      await movesAPI.updateMove(_id, update)
+      return { ok: true }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return error
+      } else {
+        throw new Error(`Mutation error: ${error}`)
+      }
+    }
+  },
 }
