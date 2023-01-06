@@ -1,10 +1,10 @@
 export const typeDefs = `#graphql
 
   type Query {
-    moves: [Move!]!
-    users: [User!]!
     getUser(input: UserIdInput!): User
     getMove(input: MoveIdInput!): Move
+    users: [User!]!
+    movesByUserId(input: UserIdInput!): [Move!]!
   }
 
   type Mutation {
@@ -17,16 +17,16 @@ export const typeDefs = `#graphql
 
   type User {
     _id: ID!
-    username: String!
     email: String!
     password: String!
     token: String!
+    username: String!
   }
 
   type Move {
     _id: ID!
-    name: String!
     description: String
+    name: String!
     user_id: String!
   }
 
@@ -39,8 +39,8 @@ export const typeDefs = `#graphql
   }
 
   input CreateMoveInput {
-    name: String!
     description: String
+    name: String!
     user_id: String!
   }
 

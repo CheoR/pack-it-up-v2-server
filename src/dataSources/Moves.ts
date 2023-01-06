@@ -10,7 +10,6 @@ export default class MovesAPI extends MongoDataSource<IMove> {
   }
   async createMove(input: IMove): Promise<IMove | MoveError> {
     try {
-      console.log(`DATASOURCES MOVES input: ${input}`)
       const resp = await this.model.create(input)
       return resp
     } catch (error: unknown) {
@@ -20,5 +19,10 @@ export default class MovesAPI extends MongoDataSource<IMove> {
         throw new Error('Coult not create move - other than Error')
       }
     }
+  }
+
+  async getMovesByUserId(id: string) {
+    const resp = await this.model.find({ user_id: id }).exec()
+    return resp
   }
 }

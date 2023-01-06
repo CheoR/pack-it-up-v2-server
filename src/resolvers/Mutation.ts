@@ -8,7 +8,6 @@ import { User } from '../models/user'
 import { IMove, MoveError } from '../types/move'
 import { Move } from '../models/move'
 
-
 export const Mutation = {
   async loginUser(
     // @ts-ignore: Make type
@@ -63,8 +62,6 @@ export const Mutation = {
     // @ts-ignore: Make type
     { dataSources: { movesAPI } },
   ): Promise<IMove | MoveError> {
-    console.log(`Mutation MOVES input: \nname: ${name}\n${description}\nuse_id: ${user_id}`)
-
     const newMove = new Move({
       name: name.toLowerCase(),
       description: description?.toLowerCase(),

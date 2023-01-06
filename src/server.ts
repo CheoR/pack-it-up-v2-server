@@ -26,11 +26,6 @@ export interface AppContext {
   }
 }
 
-// interface ContextParams {
-//   req: express.Request
-//   res?: express.Request
-// }
-
 const DEFAULT_PORT = 4000
 
 async function startApolloServer() {
