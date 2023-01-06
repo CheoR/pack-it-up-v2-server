@@ -8,6 +8,7 @@ export default class MovesAPI extends MongoDataSource<IMove> {
     // @ts-ignore
     super.initialize({ context: this.context, cache })
   }
+
   async createMove(input: IMove): Promise<IMove | MoveError> {
     try {
       const resp = await this.model.create(input)
@@ -24,6 +25,25 @@ export default class MovesAPI extends MongoDataSource<IMove> {
   async getMovesByUserId(id: string) {
     const resp = await this.model.find({ user_id: id }).exec()
     return resp
+  }
+
+  async removeMove(_id: string) {
+    try {
+      const resp = await this.model.deleteOne({ _id })
+      // even if user does not exist
+      // would not throw error because deletedCount is just 0
+      if (resp.deletedCount) {
+        return resp
+      } else {
+        throw new Error(ErrorMessages.DeleteError)
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(ErrorMessages.DeleteError)
+      } else {
+        throw new Error(`dataSources error: ${error}`)
+      }
+    }
   }
 
   async updateMove(

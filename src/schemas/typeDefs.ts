@@ -11,6 +11,7 @@ export const typeDefs = `#graphql
     createMove(input: CreateMoveInput!): Move
     registerUser(input: RegisterUserInput!): User
     loginUser(input: LoginUserInput!): User
+    removeMove(input: MoveIdInput!): DeleteResponse
     removeUser(input: UserIdInput!): DeleteResponse
     updateMove(input: MoveIdInput!, update: MoveUpdateInput): UpdateResponse
     updateUser(input: UserIdInput!, update: UserUpdateInput): UpdateResponse

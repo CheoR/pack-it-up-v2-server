@@ -144,6 +144,26 @@ export const Mutation = {
     }
   },
 
+  async removeMove(
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    { input: { _id } },
+    // @ts-ignore: Make type
+    { dataSources: { movesAPI } },
+  ): Promise<DeleteResponse | MoveError> {
+    try {
+      await movesAPI.removeMove(_id)
+      return { ok: true }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return error
+      } else {
+        throw new Error(`Mutation error: ${error}`)
+      }
+    }
+  },
+
   async removeUser(
     // @ts-ignore: Make type
     parent,
@@ -163,6 +183,7 @@ export const Mutation = {
       }
     }
   },
+
   async updateUser(
     // @ts-ignore: Make type
     parent,
