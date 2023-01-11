@@ -48,8 +48,12 @@ async function startApolloServer() {
     json(),
     expressMiddleware(server, {
       context: async ({ req }) => {
+        console.log(`i'm a little piggy, req is`)
+        console.log(req.body)
         const token = req.headers.token
+        console.log(`token: ${token}`)
         const { cache } = server
+        console.log('-------------\n\n')
         return {
           token,
           dataSources: {

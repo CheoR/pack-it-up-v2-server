@@ -58,26 +58,50 @@ export const Mutation = {
     // @ts-ignore: Make type
     parent,
     // @ts-ignore: Make type
-    { input: { name, description, user_id } },
+    { input: { name, description, user_id, count }, token },
     // @ts-ignore: Make type
     { dataSources: { movesAPI } },
-  ): Promise<IMove | MoveError> {
-    const newMove = new Move({
-      name: name.toLowerCase(),
-      description: description?.toLowerCase(),
-      user_id,
+  ): Promise<IMove | IMove[] | MoveError> {
+    console.log('server Mutations createMOve')
+    console.log(name, description, user_id)
+    console.log(`createing ${count} moves`)
+    console.log(`token: ${token}`)
+    console.log('---------\n\n')
+
+    // const newMove = new Move({
+    //   name: name.toLowerCase(),
+    //   description: description?.toLowerCase(),
+    //   user_id,
+    // })
+    const moves = new Array(count).fill({}).map((e, i) => {
+      return new Move({
+        name: `${name.toLowerCase()} ${i}`,
+        description: description?.toLowerCase(),
+        user_id,
+      })
     })
+    console.log('moves')
+    console.log(moves)
+    // const moves = new Move({
+    //   name: name.toLowerCase(),
+    //   description: description?.toLowerCase(),
+    //   user_id,
+    // })
 
     try {
-      const resp = await movesAPI.createMove(newMove)
+      const resp = await movesAPI.createMove(moves) // movesAPI.createMove(newMove)
+      console.log('moves resp')
+      console.log(resp)
       return resp
     } catch (error: unknown) {
       if (error instanceof Error) {
+        console.log(`Mutation.ts Mutations createmove: ${error.message}`)
+        console.log(error.stack)
         throw new Error(error.message)
       } else {
         return {
           message:
-            'Resolvers Mutation.ts Mutation createMOve: something went wrong',
+            'Resolvers Mutation.ts Mutation createMove: something went wrong',
         }
       }
     }
@@ -91,6 +115,8 @@ export const Mutation = {
     // @ts-ignore: Make type
     { dataSources: { usersAPI } },
   ): Promise<IUser | UserError> {
+    console.log('server Mutations  registerUser')
+    console.log(email, firstName, lastName, password, username)
     const oldUser = await User.findOne({ email })
 
     if (oldUser) {

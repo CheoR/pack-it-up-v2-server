@@ -8,7 +8,7 @@ export const typeDefs = `#graphql
   }
 
   type Mutation {
-    createMove(input: CreateMoveInput!): Move
+    createMove(input: CreateMoveInput!): [Move!]
     registerUser(input: RegisterUserInput!): User
     loginUser(input: LoginUserInput!): User
     removeMove(input: MoveIdInput!): DeleteResponse
@@ -41,6 +41,7 @@ export const typeDefs = `#graphql
   }
 
   input CreateMoveInput {
+    count: Int
     description: String
     name: String!
     user_id: String!

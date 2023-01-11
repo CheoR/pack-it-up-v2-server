@@ -9,9 +9,14 @@ export default class MovesAPI extends MongoDataSource<IMove> {
     super.initialize({ context: this.context, cache })
   }
 
-  async createMove(input: IMove): Promise<IMove | MoveError> {
+  async createMove(input: IMove[]): Promise<IMove | IMove[] | MoveError> {
+    console.log('server/moves.ts createMove')
+    console.log(input)
+    console.log('--------------\n\n')
     try {
       const resp = await this.model.create(input)
+      console.log('Moves resp')
+      console.log(resp)
       return resp
     } catch (error: unknown) {
       if (error instanceof Error) {
