@@ -35,7 +35,7 @@ export default class UsersAPI extends MongoDataSource<IUser> {
       return resp
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error('Could not create user')
+        throw new Error(`Could not create user: ${error.message}`)
       } else {
         throw new Error('Coult not create user - other than Error')
       }
