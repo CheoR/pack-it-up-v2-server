@@ -1,13 +1,15 @@
 import { Document } from 'mongoose'
 
 export interface IUser extends Document {
-  _id: string
   email: string
   firstName: string
   lastName: string
   password: string
   username: string
-  token: string
+}
+export interface IRegisterUser extends IUser {
+  accessToken: string
+  refreshToken: string
 }
 export interface ILoginUser extends Document {
   email: string
