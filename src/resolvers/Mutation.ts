@@ -1,12 +1,20 @@
 import { ApolloError } from 'apollo-server-errors'
-import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
 
+import { IRefreshToken, RefreshTokenError } from '../types/refreshToken'
 import { DeleteResponse, UpdateResponse } from '../types/utils'
-import { ErrorMessages, ILoginUser, IUser, UserError } from '../types/user'
-import { User } from '../models/user'
+import { RefreshToken } from '../models/refreshToken'
 import { IMove, MoveError } from '../types/move'
+import { setTokens } from '../auth/jwt'
+import { User } from '../models/user'
 import { Move } from '../models/move'
+import {
+  ErrorMessages,
+  ILoginUser,
+  IRegisterUser,
+  UserError,
+} from '../types/user'
 
 export const Mutation = {
   async loginUser(
@@ -113,15 +121,14 @@ export const Mutation = {
     // @ts-ignore: Make type
     { input: { email, firstName, lastName, password, username } },
     // @ts-ignore: Make type
-    { dataSources: { usersAPI } },
-  ): Promise<IUser | UserError> {
-    console.log('server Mutations  registerUser')
-    console.log(email, firstName, lastName, password, username)
+    { dataSources },
+  ): Promise<IRegisterUser | UserError> {
     const oldUser = await User.findOne({ email })
 
     if (oldUser) {
       // TODO: replace error message
       // something like: could not crate user.
+      // Like GraphQLError
       throw new ApolloError(
         `${ErrorMessages.CreateError} - ${email} already in use.`,
         ErrorMessages.CreateError,
@@ -129,33 +136,40 @@ export const Mutation = {
     }
 
     const SALT = process.env.SALT as unknown as string
-    const encrypted = await bcrypt.hash(password, parseInt(SALT, 10))
+    const salt = await bcrypt.genSalt(parseInt(SALT, 10))
+    const hashedPassword = await bcrypt.hash(password, salt)
+
     const newUser = new User({
       email: email.toLowerCase(),
       firstName: firstName.toLowerCase(),
       lastName: lastName.toLowerCase(),
       username: username.toLowerCase(),
-      password: encrypted,
+      password: hashedPassword,
     })
 
     try {
-      const secret = process.env.JWT_SECRET as string
-      const token = jwt.sign(
+      const { accessToken, refreshToken } = setTokens({
+        id: newUser.id,
+        email: newUser.email,
+      })
+
+      const resp = await dataSources.usersAPI.registerUser(newUser)
+      await this.saveToken(
         {
-          user_id: newUser._id,
-          email,
-          firstName,
-          lastName,
-          username,
+          input: {
+            user_id: newUser._id,
+            refreshToken: refreshToken,
+          },
         },
-        secret,
         {
-          expiresIn: '2 days',
+          dataSources: {
+            tokensAPI: dataSources.tokensAPI,
+          },
         },
       )
-      newUser.token = token
 
-      const resp = await usersAPI.registerUser(newUser)
+      resp.accessToken = accessToken
+      resp.refreshToken = refreshToken
 
       return resp
     } catch (error: unknown) {
