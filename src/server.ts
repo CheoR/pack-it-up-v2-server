@@ -4,25 +4,28 @@ dotenv.config()
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServer } from '@apollo/server'
-import { json } from 'body-parser'
 import express, { Express } from 'express'
+import { json } from 'body-parser'
 import cors from 'cors'
 import http from 'http'
 
+import { RefreshToken as TokenModel } from './models/refreshToken'
 import { User as UserModel } from './models/user'
-import { Move as MoveMOdel } from './models/move'
+import { Move as MoveModel } from './models/move'
 import { Mutation } from './resolvers/Mutation'
 import { typeDefs } from './schemas/typeDefs'
-import { Query } from './resolvers/Query'
+import TokensAPI from './dataSources/Tokens'
 import MovesAPI from './dataSources/Moves'
 import UsersAPI from './dataSources/Users'
+import { Query } from './resolvers/Query'
 import connectDB from './config/db'
 
 export interface AppContext {
   token?: string | undefined
   dataSources?: {
-    usersAPI: UsersAPI
     movesAPI: MovesAPI
+    tokensAPI: TokensAPI
+    usersAPI: UsersAPI
   }
 }
 
@@ -48,17 +51,17 @@ async function startApolloServer() {
     json(),
     expressMiddleware(server, {
       context: async ({ req }) => {
-        console.log(`i'm a little piggy, req is`)
-        console.log(req.body)
+        // const token = req.headers.authorization || ""
+        // const headers = req.headers["authorization"]
+        // const token = headers?.split(" ")[1]
         const token = req.headers.token
-        console.log(`token: ${token}`)
         const { cache } = server
-        console.log('-------------\n\n')
         return {
           token,
           dataSources: {
+            movesAPI: new MovesAPI({ collection: MoveModel, cache }),
+            tokensAPI: new TokensAPI({ collection: TokenModel, cache }),
             usersAPI: new UsersAPI({ collection: UserModel, cache }),
-            movesAPI: new MovesAPI({ collection: MoveMOdel, cache }),
           },
         }
       },
