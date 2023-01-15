@@ -1,3 +1,5 @@
+// import TokensAPI from "../dataSources/Tokens"
+
 export const typeDefs = `#graphql
 
   type Query {
@@ -9,19 +11,31 @@ export const typeDefs = `#graphql
 
   type Mutation {
     createMove(input: CreateMoveInput!): [Move!]
-    registerUser(input: RegisterUserInput!): User
+    registerUser(input: RegisterUserInput!): RegisteredUser
     loginUser(input: LoginUserInput!): User
     removeMove(input: MoveIdInput!): DeleteResponse
     removeUser(input: UserIdInput!): DeleteResponse
+    saveToken(input: SaveTokenInput!): UpdateResponse
     updateMove(input: MoveIdInput!, update: MoveUpdateInput): UpdateResponse
     updateUser(input: UserIdInput!, update: UserUpdateInput): UpdateResponse
   }
 
   type User {
-    _id: ID!
     email: String!
+    firstName: String!
+    lastName: String!
     password: String!
-    token: String!
+    username: String!
+  }
+
+  type RegisteredUser {
+    _id: ID!
+    accessToken: String!
+    email: String!
+    firstName: String!
+    lastName: String!
+    password: String!
+    refreshToken: String! 
     username: String!
   }
 
@@ -30,6 +44,22 @@ export const typeDefs = `#graphql
     description: String
     name: String!
     user_id: String!
+  }
+
+  type SaveTokenInput {
+    user_id: String!
+    refreshToken: String!
+  }
+
+  input SaveTokenDataSourceInput {
+    # tokensAPI: TokensAPI
+    tokensAPI: String!
+  }
+
+
+  input SaveTokenInput {
+    input: SaveTokenInput
+    dataSources: SaveTokenDataSourceInput
   }
 
   type DeleteResponse {
