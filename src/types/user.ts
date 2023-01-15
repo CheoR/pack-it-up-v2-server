@@ -11,13 +11,14 @@ export interface IRegisterUser extends IUser {
   accessToken: string
   refreshToken: string
 }
+
 export interface ILoginUser extends Document {
   email: string
   password: string
 }
 
 export type UserError = {
-  message: string | ErrorMessages
+  message: string | Error | ErrorMessages
   resolution?: string | undefined
 }
 

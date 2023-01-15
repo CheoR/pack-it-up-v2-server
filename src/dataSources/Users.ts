@@ -1,5 +1,16 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
+import bcrypt from 'bcryptjs'
+
 import { IUser, UserError, ErrorMessages } from '../types/user'
+
+// TODO: move to schema
+// Get field keys from User modle or move findByField to service
+type PossibleFields = 'email' | 'username'
+interface FindByField {
+  field: PossibleFields
+  input: unknown
+}
+
 export default class UsersAPI extends MongoDataSource<IUser> {
   // @ts-ignore
   constructor({ collection, cache }) {
@@ -29,9 +40,35 @@ export default class UsersAPI extends MongoDataSource<IUser> {
     }
   }
 
-  async registerUser(input: IUser): Promise<IUser | UserError> {
+  async findUserBy({
+    field,
+    input,
+  }: FindByField): Promise<IUser | UserError | null> {
     try {
-      const resp = await this.model.create(input)
+      const resp = await this.model.findOne({ field: input })
+      return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return {
+          message: new Error(`
+          dataSources/Users.ts User by email Not Found: ${error.message}`),
+        }
+      } else {
+        throw new Error(`dataSources error: ${error}`)
+      }
+    }
+  }
+
+  async registerUser(input: IUser): Promise<IUser | UserError> {
+    const SALT = process.env.SALT as unknown as string
+    const salt = await bcrypt.genSalt(parseInt(SALT, 10))
+    const hashedPassword = await bcrypt.hash(input.password, salt)
+
+    try {
+      const resp = await this.model.create({
+        ...input,
+        password: hashedPassword,
+      })
       return resp
     } catch (error: unknown) {
       if (error instanceof Error) {

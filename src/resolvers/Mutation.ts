@@ -123,8 +123,10 @@ export const Mutation = {
     // @ts-ignore: Make type
     { dataSources },
   ): Promise<IRegisterUser | UserError> {
-    const oldUser = await User.findOne({ email })
-
+    const oldUser = await dataSources.usersAPI.findUserBy({
+      field: 'email',
+      input: email,
+    })
     if (oldUser) {
       // TODO: replace error message
       // something like: could not crate user.
@@ -135,29 +137,23 @@ export const Mutation = {
       )
     }
 
-    const SALT = process.env.SALT as unknown as string
-    const salt = await bcrypt.genSalt(parseInt(SALT, 10))
-    const hashedPassword = await bcrypt.hash(password, salt)
-
-    const newUser = new User({
+    try {
+      const resp = await dataSources.usersAPI.registerUser({
       email: email.toLowerCase(),
       firstName: firstName.toLowerCase(),
       lastName: lastName.toLowerCase(),
       username: username.toLowerCase(),
-      password: hashedPassword,
+        password,
     })
 
-    try {
       const { accessToken, refreshToken } = setTokens({
-        id: newUser.id,
-        email: newUser.email,
+        id: resp._id,
+        email: resp.email,
       })
-
-      const resp = await dataSources.usersAPI.registerUser(newUser)
       await this.saveToken(
         {
           input: {
-            user_id: newUser._id,
+            user_id: resp._id,
             refreshToken: refreshToken,
           },
         },
