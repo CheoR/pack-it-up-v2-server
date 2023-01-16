@@ -1,13 +1,13 @@
 import { model, Model, Schema } from 'mongoose'
 
-import { IUser } from '../types/user'
+import { IUserDocument } from '../types/user'
 
 const validateEmail = (email: string) => {
   const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
   return re.test(email)
 }
 
-const UserSchema: Schema = new Schema<IUser>({
+const UserSchema: Schema = new Schema<IUserDocument>({
   email: {
     type: String,
     trim: true,
@@ -49,4 +49,7 @@ const UserSchema: Schema = new Schema<IUser>({
   },
 })
 
-export const User: Model<IUser> = model<IUser>('User', UserSchema)
+export const User: Model<IUserDocument> = model<IUserDocument>(
+  'User',
+  UserSchema,
+)

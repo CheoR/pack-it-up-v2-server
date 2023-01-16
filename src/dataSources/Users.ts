@@ -1,7 +1,8 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
 import bcrypt from 'bcryptjs'
 
-import { IUser, UserError, ErrorMessages } from '../types/user'
+import { IUserDocument, IRegisterUserInput, UserError, ErrorMessages } from '../types/user'
+import { SALT } from '../constants/constants'
 
 // TODO: move to schema
 // Get field keys from User modle or move findByField to service
@@ -11,7 +12,7 @@ interface FindByField {
   input: unknown
 }
 
-export default class UsersAPI extends MongoDataSource<IUser> {
+export default class UsersAPI extends MongoDataSource<IUserDocument> {
   // @ts-ignore
   constructor({ collection, cache }) {
     super(collection)
@@ -43,9 +44,10 @@ export default class UsersAPI extends MongoDataSource<IUser> {
   async findUserBy({
     field,
     input,
-  }: FindByField): Promise<IUser | UserError | null> {
+  }: FindByField): Promise<IUserDocument | UserError | null> {
     try {
-      const resp = await this.model.findOne({ field: input })
+      const resp = await this.model.findOne({ [field]: input })
+
       return resp
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -59,8 +61,9 @@ export default class UsersAPI extends MongoDataSource<IUser> {
     }
   }
 
-  async registerUser(input: IUser): Promise<IUser | UserError> {
-    const SALT = process.env.SALT as unknown as string
+  async registerUser({
+    input,
+  }: IRegisterUserInput): Promise<IUserDocument | UserError> {
     const salt = await bcrypt.genSalt(parseInt(SALT, 10))
     const hashedPassword = await bcrypt.hash(input.password, salt)
 
@@ -69,6 +72,7 @@ export default class UsersAPI extends MongoDataSource<IUser> {
         ...input,
         password: hashedPassword,
       })
+
       return resp
     } catch (error: unknown) {
       if (error instanceof Error) {

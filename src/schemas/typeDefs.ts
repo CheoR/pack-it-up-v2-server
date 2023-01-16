@@ -11,8 +11,8 @@ export const typeDefs = `#graphql
 
   type Mutation {
     createMove(input: CreateMoveInput!): [Move!]
-    registerUser(input: RegisterUserInput!): RegisteredUser
-    loginUser(input: LoginUserInput!): User
+    registerUser(input: RegisterUserInput!): RegisteredUserResponse
+    loginUser(input: LoginUserInput!): LoggedInUser
     removeMove(input: MoveIdInput!): DeleteResponse
     removeUser(input: UserIdInput!): DeleteResponse
     saveToken(input: SaveTokenInput!): UpdateResponse
@@ -28,7 +28,7 @@ export const typeDefs = `#graphql
     username: String!
   }
 
-  type RegisteredUser {
+  type RegisteredUserResponse {
     _id: ID!
     accessToken: String!
     email: String!

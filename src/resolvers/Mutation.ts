@@ -12,7 +12,9 @@ import { Move } from '../models/move'
 import {
   ErrorMessages,
   ILoginUser,
-  IRegisterUser,
+  IRegisterUserResponse,
+  IRegisterUserInput,
+  IUserDocument,
   UserError,
 } from '../types/user'
 
@@ -119,15 +121,18 @@ export const Mutation = {
     // @ts-ignore: Make type
     parent,
     // @ts-ignore: Make type
-    { input: { email, firstName, lastName, password, username } },
+    {
+      input: { email, firstName, lastName, password, username },
+    }: IRegisterUserInput,
     // @ts-ignore: Make type
     { dataSources },
-  ): Promise<IRegisterUser | UserError> {
-    const oldUser = await dataSources.usersAPI.findUserBy({
+  ): Promise<IRegisterUserResponse | UserError> {
+    const user = await dataSources.usersAPI.findUserBy({
       field: 'email',
       input: email,
     })
-    if (oldUser) {
+
+    if (user) {
       // TODO: replace error message
       // something like: could not crate user.
       // Like GraphQLError
@@ -139,30 +144,22 @@ export const Mutation = {
 
     try {
       const resp = await dataSources.usersAPI.registerUser({
+        input: {
       email: email.toLowerCase(),
       firstName: firstName.toLowerCase(),
       lastName: lastName.toLowerCase(),
       username: username.toLowerCase(),
         password,
+        },
     })
 
-      const { accessToken, refreshToken } = setTokens({
-        id: resp._id,
-        email: resp.email,
-      })
-      await this.saveToken(
-        {
+      const { accessToken, refreshToken } =
+        await dataSources.tokensAPI.saveToken({
           input: {
             user_id: resp._id,
-            refreshToken: refreshToken,
+            email: resp.email,
           },
-        },
-        {
-          dataSources: {
-            tokensAPI: dataSources.tokensAPI,
-          },
-        },
-      )
+        })
 
       resp.accessToken = accessToken
       resp.refreshToken = refreshToken

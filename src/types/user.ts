@@ -1,13 +1,24 @@
 import { Document } from 'mongoose'
 
-export interface IUser extends Document {
+export interface IUserDocument extends Document {
   email: string
   firstName: string
   lastName: string
   password: string
   username: string
 }
-export interface IRegisterUser extends IUser {
+
+export interface IRegisterUserInput extends Document {
+  input: {
+    email: string
+    firstName: string
+    lastName: string
+    password: string
+    username: string
+  }
+}
+
+export interface IRegisterUserResponse extends IUserDocument {
   accessToken: string
   refreshToken: string
 }
