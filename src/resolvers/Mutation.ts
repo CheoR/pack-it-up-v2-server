@@ -1,23 +1,15 @@
 import { ApolloError } from 'apollo-server-errors'
-import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 
 import { DeleteResponse, UpdateResponse } from '../types/utils'
-// import { RefreshToken } from '../models/refreshToken'
+import { IRefreshTokenResp } from '../types/refreshToken'
 import { IMove, MoveError } from '../types/move'
 import { Move } from '../models/move'
-import {
-  IRefreshToken,
-  ISaveToken,
-  RefreshTokenError,
-  IRefreshTokenResp
-} from '../types/refreshToken'
 import {
   ErrorMessages,
   ILoginUserInput,
   IRegisterUserResponse,
   IRegisterUserInput,
-  IUserDocument,
   UserError,
 } from '../types/user'
 
