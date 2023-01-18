@@ -2,16 +2,19 @@ import { ApolloError } from 'apollo-server-errors'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 
-import { IRefreshToken, RefreshTokenError } from '../types/refreshToken'
 import { DeleteResponse, UpdateResponse } from '../types/utils'
-import { RefreshToken } from '../models/refreshToken'
+// import { RefreshToken } from '../models/refreshToken'
 import { IMove, MoveError } from '../types/move'
-import { setTokens } from '../auth/jwt'
-import { User } from '../models/user'
 import { Move } from '../models/move'
 import {
+  IRefreshToken,
+  ISaveToken,
+  RefreshTokenError,
+  IRefreshTokenResp
+} from '../types/refreshToken'
+import {
   ErrorMessages,
-  ILoginUser,
+  ILoginUserInput,
   IRegisterUserResponse,
   IRegisterUserInput,
   IUserDocument,
@@ -23,29 +26,28 @@ export const Mutation = {
     // @ts-ignore: Make type
     parent,
     // @ts-ignore: Make type
-    { input: { email, password } },
-  ): Promise<ILoginUser | UserError> {
+    { input: { email, password } }: ILoginUserInput,
+    // @ts-ignore: Make type
+    { dataSources },
+  ): Promise<IRefreshTokenResp | UserError> {
     try {
-      const user = await User.findOne({ email })
+      // TODO: Only return what you need
+      const user = await dataSources.usersAPI.findUserBy({
+        field: 'email',
+        input: email,
+      })
 
       if (user && (await bcrypt.compare(password, user.password))) {
         // Typecasting needed to overcome error.
         // No overload matches this call.
-        const secret = process.env.JWT_SECRET as string
-        const token = jwt.sign(
-          {
-            user_id: user._id,
-            email,
-          },
-          secret,
-          {
-            expiresIn: '2 days',
-          },
-        )
+        const tokens = await dataSources.tokensAPI.getToken({
+          field: 'user_id',
+          input: user._id,
+        })
 
-        user.token = token
+        tokens.username = user.username
 
-        return user
+        return tokens
       } else {
         throw new ApolloError(
           'Email/Password do not match',
@@ -145,13 +147,13 @@ export const Mutation = {
     try {
       const resp = await dataSources.usersAPI.registerUser({
         input: {
-      email: email.toLowerCase(),
-      firstName: firstName.toLowerCase(),
-      lastName: lastName.toLowerCase(),
-      username: username.toLowerCase(),
-        password,
+          email: email.toLowerCase(),
+          firstName: firstName.toLowerCase(),
+          lastName: lastName.toLowerCase(),
+          username: username.toLowerCase(),
+          password,
         },
-    })
+      })
 
       const { accessToken, refreshToken } =
         await dataSources.tokensAPI.saveToken({
