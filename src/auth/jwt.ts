@@ -1,14 +1,15 @@
 import { compare } from 'bcryptjs'
 import { Types } from 'mongoose'
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
 import {
   ACCESS_TOKEN_DURATION,
   ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_DURATION,
   REFRESH_TOKEN_SECRET,
+  SALT,
 } from '../constants/constants'
 
-const { sign, verify } = jwt
 export interface IToken {
   id: Types.ObjectId
   email: string
@@ -30,7 +31,7 @@ export const setTokens = ({ id, email }: IToken) => {
 
   user.email = email
 
-  const refreshToken = sign(user, REFRESH_TOKEN_SECRET, {
+  const refreshToken = jwt.sign(user, REFRESH_TOKEN_SECRET, {
     expiresIn: REFRESH_TOKEN_DURATION,
   })
 
@@ -54,6 +55,7 @@ export const validateAccessToken = async (token: string) => {
     }
   }
 }
+
 export const validateRefreshToken = async (token: string) => {
   // const salt = await bcrypt.genSalt(parseInt(SALT, 10))
   // const refreshToken = await bcrypt.hash(token, salt)
