@@ -24,7 +24,7 @@ export const setTokens = ({ id, email }: IToken) => {
     user_id: id,
   }
 
-  const accessToken = sign(user, ACCESS_TOKEN_SECRET, {
+  const accessToken = jwt.sign(user, ACCESS_TOKEN_SECRET, {
     expiresIn: ACCESS_TOKEN_DURATION,
   })
 
@@ -37,7 +37,23 @@ export const setTokens = ({ id, email }: IToken) => {
   return { id, accessToken, refreshToken }
 }
 
-export const validateAccessToken = (token: string) => {
+export const validateAccessToken = async (token: string) => {
+  try {
+    return await jwt.verify(token, ACCESS_TOKEN_SECRET)
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message !== 'jwt expired') {
+        console.error(`Access token error: ${error.message}`)
+        // return null
+      }
+      // throw new Error(error.message)
+    } else {
+      return {
+        message: `JWT Access token error`,
+      }
+    }
+  }
+}
   try {
     return verify(token, ACCESS_TOKEN_SECRET)
   } catch (error: unknown) {

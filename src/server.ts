@@ -19,7 +19,7 @@ import MovesAPI from './dataSources/Moves'
 import UsersAPI from './dataSources/Users'
 import { Query } from './resolvers/Query'
 import connectDB from './config/db'
-import { validateAccessToken } from './auth/jwt'
+  validateAccessToken,
 
 export interface AppContext {
   token?: string | undefined
@@ -55,25 +55,21 @@ async function startApolloServer() {
         // const token = req.headers.authorization || ""
         // const headers = req.headers["authorization"]
         // const token = headers?.split(" ")[1]
-        const token = req.headers.token
-        let accessToken
-        let refreshToken
-        let field = req.headers['x-access-token']
-        let id: string | null
-
-        console.log(`field is: ${field}`)
+        let accessToken = req.headers['x-access-token']
 
         // In case null is 'null', e.g. string
-        if (typeof field === 'string') {
-          const token = req.headers['x-access-token']
+        if (typeof accessToken === 'string') {
           // @ts-ignore
-          accessToken = token.replace(/^null$/, '')
+          accessToken = accessToken.replace(/^null$/, '')
         }
 
         field = req.headers['x-refresh-token']
         if (typeof field === 'string') {
           // @ts-ignore
-          refreshToken = req.headers['x-access-token']?.replace(/^null$/, '')
+        if (accessToken && typeof accessToken === 'string') {
+          const decodedAccessToken = await validateAccessToken(accessToken)
+          // @ts-ignore
+          user_id = decodedAccessToken?.user_id
         }
 
         if (accessToken) {
