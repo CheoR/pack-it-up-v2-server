@@ -4,7 +4,7 @@ dotenv.config()
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServer } from '@apollo/server'
-import express, { Express } from 'express'
+import express, { Express, Response, Request } from 'express'
 import { json } from 'body-parser'
 import cors from 'cors'
 import http from 'http'
@@ -34,6 +34,11 @@ export interface AppContext {
   }
 }
 
+export interface MiddlewareContext {
+  res: Response
+  req: Request
+}
+
 const DEFAULT_PORT = 4000
 
 async function startApolloServer() {
@@ -55,10 +60,11 @@ async function startApolloServer() {
     cors<cors.CorsRequest>(),
     json(),
     expressMiddleware(server, {
-      context: async ({ req }) => {
+      context: async ({ req, res }: MiddlewareContext) => {
         // const token = req.headers.authorization || ""
         // const headers = req.headers["authorization"]
         // const token = headers?.split(" ")[1]
+        // const token = req.headers.token
         let accessToken = req.headers['x-access-token']
         let refreshToken = req.headers['x-refresh-token']
         let user_id: string | null = null
@@ -96,19 +102,30 @@ async function startApolloServer() {
               email: tokenUser.email,
             })
 
+            // @ts-ignore
+            user_id = tokenUser?.user_id
             // TODO: update db tokens to include new refresh token
-            console.log(`refresh token is now: \n${refreshToken}`)
             res.set('x-access-token', accessToken)
             res.set('x-refresh-token', refreshToken)
-        }
+          }
         } else
           console.info(
             `Invalid/expired access token presented but refreshToken null or missing!`,
           )
+        // If user_id available, add to req in context to pass to resolvers
+        // access with req.user_id
+        // note: won't send to client unless you query gql for fields
+        // if (user_id) {
+        //   console.log(`server user_id: ${user_id}`)
+        //   // @ts-ignore
+        //   req.user_id = user_id
+        // }
 
         const { cache } = server
         return {
-          token,
+          res,
+          req,
+          user_id: user_id ?? null,
           dataSources: {
             movesAPI: new MovesAPI({ collection: MoveModel, cache }),
             tokensAPI: new TokensAPI({ collection: TokenModel, cache }),

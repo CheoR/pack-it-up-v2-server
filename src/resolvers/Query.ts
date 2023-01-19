@@ -21,7 +21,7 @@ export const Query = {
     // @ts-ignore: Make type
     { input: { _id } },
     // @ts-ignore: Make type
-    { dataSources: { usersAPI } },
+    { dataSources: { usersAPI }, user_id },
   ) => {
     try {
       const resp = await usersAPI.getUser(_id)
