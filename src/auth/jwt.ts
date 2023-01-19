@@ -54,13 +54,17 @@ export const validateAccessToken = async (token: string) => {
     }
   }
 }
+export const validateRefreshToken = async (token: string) => {
+  // const salt = await bcrypt.genSalt(parseInt(SALT, 10))
+  // const refreshToken = await bcrypt.hash(token, salt)
   try {
-    return verify(token, ACCESS_TOKEN_SECRET)
+    return await jwt.verify(token, REFRESH_TOKEN_SECRET)
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.message !== 'jwt expired')
-        console.error(`Access token error: ${error.message}`)
-      throw new Error(error.message)
+        console.error(`Refresh token error: ${error.message}`)
+      // throw new Error(error.message)
+      return null
     } else {
       return {
         message: `JWT Access token error`,
