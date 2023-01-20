@@ -23,9 +23,11 @@ export interface IRegisterUserResponse extends IUserDocument {
   refreshToken: string
 }
 
-export interface ILoginUser extends Document {
-  email: string
-  password: string
+export interface ILoginUserInput extends Document {
+  input: {
+    email: string
+    password: string
+  }
 }
 
 export type UserError = {

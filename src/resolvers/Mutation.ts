@@ -1,10 +1,15 @@
 import { ApolloError } from 'apollo-server-errors'
-import bcrypt from 'bcryptjs'
+import { GraphQLError } from 'graphql'
 
 import { DeleteResponse, UpdateResponse } from '../types/utils'
-import { IRefreshTokenResp } from '../types/refreshToken'
+import { comparePromise, setTokens } from '../auth/jwt'
 import { IMove, MoveError } from '../types/move'
 import { Move } from '../models/move'
+import {
+  IRefreshTokenResponse,
+  RefreshTokenError,
+  Tokens,
+} from '../types/refreshToken'
 import {
   ErrorMessages,
   ILoginUserInput,
@@ -21,7 +26,7 @@ export const Mutation = {
     { input: { email, password } }: ILoginUserInput,
     // @ts-ignore: Make type
     { dataSources },
-  ): Promise<IRefreshTokenResp | UserError> {
+  ): Promise<IRefreshTokenResponse | Tokens | RefreshTokenError> {
     try {
       // TODO: Only return what you need
       const user = await dataSources.usersAPI.findUserBy({
@@ -29,22 +34,19 @@ export const Mutation = {
         input: email,
       })
 
-      if (user && (await bcrypt.compare(password, user.password))) {
-        // Typecasting needed to overcome error.
-        // No overload matches this call.
-        const tokens = await dataSources.tokensAPI.getToken({
-          field: 'user_id',
-          input: user._id,
+      if (user && (await comparePromise(password, user.password))) {
+        const tokens = setTokens({
+          id: user._id,
+          email: user.email,
         })
 
         tokens.username = user.username
 
         return tokens
       } else {
-        throw new ApolloError(
-          'Email/Password do not match',
-          ErrorMessages.ReadError,
-        )
+        throw new GraphQLError('Invalid credentials', {
+          extensions: { code: 'UNAUTHENTICATED' },
+        })
       }
     } catch (error: unknown) {
       if (error instanceof Error) {

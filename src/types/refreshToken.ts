@@ -14,6 +14,12 @@ export interface IRefreshTokenResponse extends IRefreshTokenDocument {
   accessToken: string
   username: string
 }
+
+export interface Tokens {
+  user_id: Types.ObjectId
+  accessToken: string
+  refreshToken: string
+  username: string
 }
 
 export interface ISaveTokenInput {
