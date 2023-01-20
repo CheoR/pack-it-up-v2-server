@@ -1,13 +1,12 @@
+import { Document, Types } from 'mongoose'
 import { compare } from 'bcryptjs'
-import { Types } from 'mongoose'
 import jwt from 'jsonwebtoken'
-import bcrypt from 'bcryptjs'
 import {
   ACCESS_TOKEN_DURATION,
   ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_DURATION,
   REFRESH_TOKEN_SECRET,
-  SALT,
+  // SALT,
 } from '../constants/constants'
 
 export interface IToken {
@@ -20,7 +19,15 @@ export interface IUserToken {
   email?: string
 }
 
-export const setTokens = ({ id, email }: IToken) => {
+export interface IUserTokenResponse {
+  user_id: Types.ObjectId
+  username: string
+  accessToken: string
+  refreshToken: string
+  email?: string
+}
+
+export const setTokens = ({ id, email }: IToken): IUserTokenResponse => {
   const user: IUserToken = {
     user_id: id,
   }
@@ -35,7 +42,7 @@ export const setTokens = ({ id, email }: IToken) => {
     expiresIn: REFRESH_TOKEN_DURATION,
   })
 
-  return { id, accessToken, refreshToken }
+  return { username: '', user_id: id, accessToken, refreshToken }
 }
 
 export const validateAccessToken = async (token: string) => {
@@ -73,4 +80,13 @@ export const validateRefreshToken = async (token: string) => {
       }
     }
   }
+}
+
+export const comparePromise = (password: string, hash: string) => {
+  return new Promise((resolve, reject) => {
+    compare(password, hash, (err, result) => {
+      if (err) reject(err)
+      else resolve(result)
+    })
+  })
 }
