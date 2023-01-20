@@ -3,15 +3,17 @@ import { Document, Types } from 'mongoose'
 // TODO: Remove Document - We strongly recommend against using this approach,
 // its support will be dropped in the next major version
 // https://mongoosejs.com/docs/typescript.html
-export interface IRefreshToken extends Document {
+export interface IRefreshTokenDocument extends Document {
   createdAt: Date
   expiresAt: Date
   refreshToken: string
   user_id: Types.ObjectId
 }
 
-export interface IRefreshTokenResp extends IRefreshToken {
+export interface IRefreshTokenResponse extends IRefreshTokenDocument {
   accessToken: string
+  username: string
+}
 }
 
 export interface ISaveTokenInput {
@@ -21,7 +23,7 @@ export interface ISaveTokenInput {
   }
 }
 
-export interface ISaveToken extends IRefreshToken {
+export interface ISaveToken extends IRefreshTokenDocument {
   input: {
     user_id: Types.ObjectId
     email: string

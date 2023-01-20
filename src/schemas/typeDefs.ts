@@ -19,11 +19,10 @@ export const typeDefs = `#graphql
   }
 
   type Tokens {
-    _id: ID!
+    _id: ID
     accessToken: String!
     refreshToken: String!
     user_id: ID!
-    username: String!
   }
 
   type User {

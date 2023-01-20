@@ -1,8 +1,8 @@
 import { model, Model, Schema } from 'mongoose'
 
-import { IRefreshToken } from '../types/refreshToken'
+import { IRefreshTokenDocument } from '../types/refreshToken'
 
-const RefreshTokenSchema: Schema = new Schema<IRefreshToken>({
+const RefreshTokenSchema: Schema = new Schema<IRefreshTokenDocument>({
   createdAt: {
     type: Date,
     default: Date.now,
@@ -25,7 +25,5 @@ const RefreshTokenSchema: Schema = new Schema<IRefreshToken>({
   },
 })
 
-export const RefreshToken: Model<IRefreshToken> = model<IRefreshToken>(
-  'RefreshToken',
-  RefreshTokenSchema,
-)
+export const RefreshToken: Model<IRefreshTokenDocument> =
+  model<IRefreshTokenDocument>('RefreshToken', RefreshTokenSchema)

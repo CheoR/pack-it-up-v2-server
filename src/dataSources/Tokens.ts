@@ -1,16 +1,16 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
 import jwt from 'jsonwebtoken'
-import bcrypt from 'bcryptjs'
+// import bcrypt from 'bcryptjs'
 
 import { setTokens } from '../auth/jwt'
 import {
   ACCESS_TOKEN_DURATION,
   ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_DURATION,
-  SALT,
+  // SALT,
 } from '../constants/constants'
 import {
-  IRefreshTokenResp,
+  IRefreshTokenResponse,
   ISaveToken,
   RefreshTokenError,
 } from '../types/refreshToken'
@@ -22,7 +22,7 @@ interface FindByField {
   input: unknown
 }
 
-export default class TokensAPI extends MongoDataSource<IRefreshTokenResp> {
+export default class TokensAPI extends MongoDataSource<IRefreshTokenResponse> {
   // @ts-ignore
   constructor({ collection, cache }) {
     super(collection)
@@ -33,7 +33,7 @@ export default class TokensAPI extends MongoDataSource<IRefreshTokenResp> {
   async getToken({
     field,
     input,
-  }: FindByField): Promise<IRefreshTokenResp | RefreshTokenError | null> {
+  }: FindByField): Promise<IRefreshTokenResponse | RefreshTokenError | null> {
     try {
       const resp = await this.model.findOne({ [field]: input })
 
@@ -67,15 +67,18 @@ export default class TokensAPI extends MongoDataSource<IRefreshTokenResp> {
 
   async saveToken({
     input,
-  }: ISaveToken): Promise<IRefreshTokenResp | RefreshTokenError> {
-    const salt = await bcrypt.genSalt(parseInt(SALT, 10))
+  }: ISaveToken): Promise<IRefreshTokenResponse | RefreshTokenError> {
+    // const salt = await bcrypt.genSalt(parseInt(SALT, 10))
 
     const { accessToken, refreshToken } = setTokens({
       id: input.user_id,
       email: input.email,
     })
 
-    const hashedRefreshToken = await bcrypt.hash(refreshToken, salt)
+    console.log('REFRESH TOKEN BEFOR HASHING')
+    console.log(refreshToken)
+    console.log('=====')
+    // const hashedRefreshToken = await bcrypt.hash(refreshToken, salt)
     const now = new Date()
 
     try {
@@ -84,7 +87,7 @@ export default class TokensAPI extends MongoDataSource<IRefreshTokenResp> {
         expiresAt: new Date(
           now.getTime() + parseInt(REFRESH_TOKEN_DURATION, 10) * 60000,
         ),
-        refreshToken: hashedRefreshToken,
+        refreshToken, // : hashedRefreshToken,
       })
 
       resp.accessToken = accessToken
