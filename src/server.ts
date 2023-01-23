@@ -67,6 +67,10 @@ async function startApolloServer() {
         // const token = req.headers.token
         let accessToken = req.headers['x-access-token']
         let refreshToken = req.headers['x-refresh-token']
+        console.log('====================\n\n')
+        console.log(`accessToken: ${accessToken}`)
+        console.log(`refreshToken: ${refreshToken}`)
+        console.log('====================\n\n')
         let user_id: string | null = null
 
         // In case null is 'null', e.g. string
@@ -85,6 +89,7 @@ async function startApolloServer() {
           const decodedAccessToken = await validateAccessToken(accessToken)
           // @ts-ignore
           user_id = decodedAccessToken?.user_id
+          console.log(`decodedAccessToken: ${decodedAccessToken}`)
           console.log(`valid access token user_id: ${user_id}`)
         }
 
@@ -95,6 +100,8 @@ async function startApolloServer() {
           // @ts-ignore
           const tokenUser = await validateRefreshToken(refreshToken)
 
+          console.log(`tokenUser: ${tokenUser}`)
+          console.log(tokenUser)
           if (tokenUser) {
             // refresh tokens
             // pass back to client through headers
@@ -116,7 +123,7 @@ async function startApolloServer() {
           }
         } else
           console.info(
-            `Invalid/expired access token presented but refreshToken null or missing!`,
+            `Invalid/expired access token presented but refreshToken null or missing!\n\n======================\n\n\n`,
           )
         // If user_id available, add to req in context to pass to resolvers
         // access with req.user_id
