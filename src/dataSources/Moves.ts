@@ -52,7 +52,6 @@ export default class MovesAPI extends MongoDataSource<IMove> {
   }
 
   async getMovesByUserId(user_id: string) {
-    console.log(`Moves.ts getMovesByUserId: ${user_id}`)
     const resp = await this.model.find({ user_id }).exec()
     return resp
   }

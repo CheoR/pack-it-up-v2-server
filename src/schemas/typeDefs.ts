@@ -3,7 +3,7 @@ export const typeDefs = `#graphql
   type Query {
     getUser(input: UserIdInput!): User
     getMove(input: MoveIdInput!): Move
-    getMovesByUserId(input: UserIdInput!): [Move!]!
+    getMovesByUserId: [Move!]!
     users: [User!]!
   }
 

@@ -67,10 +67,6 @@ async function startApolloServer() {
         // const token = req.headers.token
         let accessToken = req.headers['x-access-token']
         let refreshToken = req.headers['x-refresh-token']
-        console.log('====================\n\n')
-        console.log(`accessToken: ${accessToken}`)
-        console.log(`refreshToken: ${refreshToken}`)
-        console.log('====================\n\n')
         let user_id: string | null = null
 
         // In case null is 'null', e.g. string
@@ -85,23 +81,16 @@ async function startApolloServer() {
         }
 
         if (accessToken && typeof accessToken === 'string') {
-          console.log(' before calling validateAccessToken')
           const decodedAccessToken = await validateAccessToken(accessToken)
           // @ts-ignore
           user_id = decodedAccessToken?.user_id
-          console.log(`decodedAccessToken: ${decodedAccessToken}`)
-          console.log(`valid access token user_id: ${user_id}`)
         }
 
         if (!user_id && refreshToken && typeof refreshToken === 'string') {
-          console.log(' before calling validateRefreshToken')
-
           // access token possibily expired
           // @ts-ignore
           const tokenUser = await validateRefreshToken(refreshToken)
 
-          console.log(`tokenUser: ${tokenUser}`)
-          console.log(tokenUser)
           if (tokenUser) {
             // refresh tokens
             // pass back to client through headers
@@ -116,7 +105,6 @@ async function startApolloServer() {
             // @ts-ignore
             user_id = tokenUser?.user_id
 
-            console.log(`valid refresh token user_id: ${user_id}`)
             // TODO: update db tokens to include new refresh token
             res.set('x-access-token', accessToken)
             res.set('x-refresh-token', refreshToken)
@@ -135,7 +123,6 @@ async function startApolloServer() {
         // }
 
         const { cache } = server
-        console.log(`server user_id: ${user_id}`)
         return {
           res,
           req,
