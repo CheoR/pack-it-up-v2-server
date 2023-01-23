@@ -3,8 +3,8 @@ export const typeDefs = `#graphql
   type Query {
     getUser(input: UserIdInput!): User
     getMove(input: MoveIdInput!): Move
+    getMovesByUserId(input: UserIdInput!): [Move!]!
     users: [User!]!
-    movesByUserId(input: UserIdInput!): [Move!]!
   }
 
   type Mutation {

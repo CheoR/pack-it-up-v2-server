@@ -1,6 +1,6 @@
 export const Query = {
   // @ts-ignore: Make type
-  movesByUserId: async (
+  getMovesByUserId: async (
     // @ts-ignore: Make type
     parent,
     // @ts-ignore: Make type
