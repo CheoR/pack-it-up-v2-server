@@ -4,11 +4,13 @@ export const Query = {
     // @ts-ignore: Make type
     parent,
     // @ts-ignore: Make type
-    { input: { _id } },
+    { input: { user_id } },
     // @ts-ignore: Make type
     { dataSources: { movesAPI } },
   ) => {
-    return movesAPI.getMovesByUserId(_id)
+
+    console.log(`user_id is: ${user_id}\ninput: ${user_id}`)
+    return movesAPI.getMovesByUserId(user_id)
   },
   // @ts-ignore: Make type
   users: async (parent, args, { dataSources: { usersAPI } }) => {

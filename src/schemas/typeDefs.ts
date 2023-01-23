@@ -86,7 +86,7 @@ export const typeDefs = `#graphql
   }
 
   input UserIdInput {
-    _id: ID!
+    user_id: ID!
   }
 
   input MoveIdInput {
