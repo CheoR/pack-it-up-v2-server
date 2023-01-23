@@ -3,7 +3,7 @@ import { GraphQLError } from 'graphql'
 
 import { DeleteResponse, UpdateResponse } from '../types/utils'
 import { comparePromise, setTokens } from '../auth/jwt'
-import { IMove, MoveError } from '../types/move'
+import { IMove, IMoveInput, MoveError } from '../types/move'
 import {
   IRefreshTokenResponse,
   RefreshTokenError,
@@ -63,11 +63,12 @@ export const Mutation = {
     // @ts-ignore: Make type
     parent,
     // @ts-ignore: Make type
-    { input, token },
+    { input }: IMoveInput,
     // @ts-ignore: Make type
-    { dataSources: { movesAPI } },
+    { dataSources: { movesAPI }, user_id },
   ): Promise<IMove | IMove[] | MoveError> {
     try {
+      input.user_id = user_id
       const resp = await movesAPI.createMove({ input })
       return resp
     } catch (error: unknown) {

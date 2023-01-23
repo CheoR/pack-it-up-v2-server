@@ -78,7 +78,6 @@ export const typeDefs = `#graphql
     count: Int
     description: String
     name: String!
-    user_id: ID!
   }
 
   input MoveIdInput {
