@@ -1,32 +1,26 @@
 import { model, Model, Schema } from 'mongoose'
-import { v4 as uuid } from 'uuid'
 
 import { IMove } from '../types/move'
 
 const MoveSchema: Schema = new Schema<IMove>({
-  _id: {
-    type: String,
-    default: uuid,
-    required: true,
-  },
   name: {
     type: String,
     trim: true,
     lowercase: true,
-    unique: true,
     required: true,
+    minLength: [2, 'Name be at least 2 characters'],
   },
   description: {
     type: String,
     trim: true,
     lowercase: true,
-    required: false,
-    minLength: [2, 'Must be at least 2 characters'],
+    minLength: [2, 'Description be at least 2 characters'],
   },
   user_id: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     trim: true,
-    require: true,
+    required: true,
   },
 })
 

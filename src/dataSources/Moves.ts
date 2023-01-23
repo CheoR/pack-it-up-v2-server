@@ -1,5 +1,8 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
-import { IMove, MoveError, ErrorMessages } from '../types/move'
+import { GraphQLError } from 'graphql'
+import { Move } from '../models/move'
+
+import { IMove, MoveError, ErrorMessages, IMoveInput } from '../types/move'
 
 export default class MovesAPI extends MongoDataSource<IMove> {
   // @ts-ignore
@@ -9,18 +12,39 @@ export default class MovesAPI extends MongoDataSource<IMove> {
     super.initialize({ context: this.context, cache })
   }
 
-  async createMove(input: IMove[]): Promise<IMove | IMove[] | MoveError> {
-    console.log('server/moves.ts createMove')
-    console.log(input)
-    console.log('--------------\n\n')
+  async createMove({
+    input: { name, description, count, user_id },
+  }: IMoveInput): Promise<IMove | IMove[] | MoveError> {
+    let resp: IMove[] = []
+    if (!count) count = 1
+
     try {
-      const resp = await this.model.create(input)
-      console.log('Moves resp')
-      console.log(resp)
+      if (count > 1) {
+        const moves = new Array(count).fill({}).map((e, i) => {
+          return new Move({
+            name: `${name.toLowerCase()} ${i}`,
+            description: description?.toLowerCase(),
+            user_id,
+          })
+        })
+
+        resp = await this.model.insertMany(moves)
+      } else {
+        const move = await this.model.create({
+          name: name.toLowerCase(),
+          description: description?.toLocaleLowerCase(),
+          user_id,
+        })
+        resp.push(move)
+      }
+
       return resp
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error('Could not create move')
+        throw new GraphQLError(`Could not create move: ${error.message}`, {
+          extensions: { code: 'FORBIDDEN', http: { status: 400 } },
+        })
+        // throw new Error(`Could not create move: ${error.message}`)
       } else {
         throw new Error('Coult not create move - other than Error')
       }

@@ -4,7 +4,6 @@ import { GraphQLError } from 'graphql'
 import { DeleteResponse, UpdateResponse } from '../types/utils'
 import { comparePromise, setTokens } from '../auth/jwt'
 import { IMove, MoveError } from '../types/move'
-import { Move } from '../models/move'
 import {
   IRefreshTokenResponse,
   RefreshTokenError,
@@ -64,40 +63,12 @@ export const Mutation = {
     // @ts-ignore: Make type
     parent,
     // @ts-ignore: Make type
-    { input: { name, description, user_id, count }, token },
+    { input, token },
     // @ts-ignore: Make type
     { dataSources: { movesAPI } },
   ): Promise<IMove | IMove[] | MoveError> {
-    console.log('server Mutations createMOve')
-    console.log(name, description, user_id)
-    console.log(`createing ${count} moves`)
-    console.log(`token: ${token}`)
-    console.log('---------\n\n')
-
-    // const newMove = new Move({
-    //   name: name.toLowerCase(),
-    //   description: description?.toLowerCase(),
-    //   user_id,
-    // })
-    const moves = new Array(count).fill({}).map((e, i) => {
-      return new Move({
-        name: `${name.toLowerCase()} ${i}`,
-        description: description?.toLowerCase(),
-        user_id,
-      })
-    })
-    console.log('moves')
-    console.log(moves)
-    // const moves = new Move({
-    //   name: name.toLowerCase(),
-    //   description: description?.toLowerCase(),
-    //   user_id,
-    // })
-
     try {
-      const resp = await movesAPI.createMove(moves) // movesAPI.createMove(newMove)
-      console.log('moves resp')
-      console.log(resp)
+      const resp = await movesAPI.createMove({ input })
       return resp
     } catch (error: unknown) {
       if (error instanceof Error) {
