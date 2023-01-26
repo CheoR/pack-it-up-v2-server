@@ -61,17 +61,13 @@ async function startApolloServer() {
     json(),
     expressMiddleware(server, {
       context: async ({ req, res }: MiddlewareContext) => {
-        // const token = req.headers.authorization || ""
-        // const headers = req.headers["authorization"]
-        // const token = headers?.split(" ")[1]
-        // const token = req.headers.token
         let accessToken = req.headers['x-access-token']
         let refreshToken = req.headers['x-refresh-token']
         let user_id: string | null = null
 
         // In case null is 'null', e.g. string
         if (typeof accessToken === 'string') {
-          // @ts-ignore
+          //@ts-ignore
           accessToken = accessToken.replace(/^null$/, '')
         }
 
@@ -106,8 +102,11 @@ async function startApolloServer() {
             user_id = tokenUser?.user_id
 
             // TODO: update db tokens to include new refresh token
-            res.set('x-access-token', accessToken)
-            res.set('x-refresh-token', refreshToken)
+            res.set({
+              // 'Access-Control-Expose-Headers': 'x-access-token,x-refresh-token',
+              'x-access-token': accessToken,
+              'x-refresh-token': refreshToken,
+            })
           }
         } else
           console.info(
