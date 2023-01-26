@@ -14,7 +14,6 @@ const MoveSchema: Schema = new Schema<IMove>({
     type: String,
     trim: true,
     lowercase: true,
-    minLength: [2, 'Description be at least 2 characters'],
   },
   user_id: {
     type: Schema.Types.ObjectId,
