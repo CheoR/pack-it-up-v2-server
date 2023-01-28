@@ -8,6 +8,7 @@ export const typeDefs = `#graphql
   }
 
   type Mutation {
+    createItem(input: CreateItemInput!): [Item!]
     createMove(input: CreateMoveInput!): [Move!]
     registerUser(input: RegisterUserInput!): RegisteredUserResponse
     loginUser(input: LoginUserInput!): Tokens
@@ -51,6 +52,16 @@ export const typeDefs = `#graphql
     user_id: String!
   }
 
+  type Item {
+    _id: ID!
+    box_id: String!
+    description: String
+    isFragile: Boolean
+    name: String!
+    user_id: String!
+    value: Float
+  }
+
   type SaveTokHenInput {
     user_id: String!
     refreshToken: String!
@@ -80,16 +91,21 @@ export const typeDefs = `#graphql
     name: String!
   }
 
+  input CreateItemInput {
+    box_id: ID!
+    count: Int
+    description: String
+    isFragile: Boolean
+    name: String!
+    value: Float
+  }
+
   input MoveIdInput {
     _id: ID!
   }
 
   input UserIdInput {
     user_id: ID!
-  }
-
-  input MoveIdInput {
-    _id: ID!
   }
 
   input MoveUpdateInput {
