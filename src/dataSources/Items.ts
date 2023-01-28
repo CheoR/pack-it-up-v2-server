@@ -58,4 +58,9 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
       }
     }
   }
+
+  async getItemsByUserId(user_id: string) {
+    const resp = await this.model.find({ user_id }).exec()
+    return resp
+  }
 }

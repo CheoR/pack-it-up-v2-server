@@ -1,5 +1,16 @@
 export const Query = {
   // @ts-ignore: Make type
+  getItemsByUserId: async (
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    args,
+    // @ts-ignore: Make type
+    { dataSources: { itemsAPI }, user_id },
+  ) => {
+    return itemsAPI.getItemsByUserId(user_id)
+  },
+  // @ts-ignore: Make type
   getMovesByUserId: async (
     // @ts-ignore: Make type
     parent,
