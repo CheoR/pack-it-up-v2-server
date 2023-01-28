@@ -14,11 +14,13 @@ import { User as UserModel } from './models/user'
 import { Move as MoveModel } from './models/move'
 import { Item as ItemModel } from './models/item'
 import { Mutation } from './resolvers/Mutation'
+import { Box as BoxModel } from './models/box'
 import { typeDefs } from './schemas/typeDefs'
 import TokensAPI from './dataSources/Tokens'
 import MovesAPI from './dataSources/Moves'
 import UsersAPI from './dataSources/Users'
 import ItemsAPI from './dataSources/Items'
+import BoxesAPI from './dataSources/Boxes'
 import { Query } from './resolvers/Query'
 import connectDB from './config/db'
 import {
@@ -30,6 +32,7 @@ import {
 export interface AppContext {
   token?: string | undefined
   dataSources?: {
+    boxesAPI: BoxesAPI
     itemsAPI: ItemsAPI
     movesAPI: MovesAPI
     tokensAPI: TokensAPI
@@ -130,6 +133,7 @@ async function startApolloServer() {
           req,
           user_id: user_id ?? null,
           dataSources: {
+            boxesAPI: new BoxesAPI({ collection: BoxModel, cache }),
             itemsAPI: new ItemsAPI({ collection: ItemModel, cache }),
             movesAPI: new MovesAPI({ collection: MoveModel, cache }),
             tokensAPI: new TokensAPI({ collection: TokenModel, cache }),
