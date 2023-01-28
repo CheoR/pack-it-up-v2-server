@@ -16,6 +16,7 @@ import {
   IRegisterUserInput,
   UserError,
 } from '../types/user'
+import { IItem, IItemInput, ItemError } from '../types/item'
 
 export const Mutation = {
   async loginUser(
@@ -54,6 +55,32 @@ export const Mutation = {
         return {
           message:
             'Resolvers Mutation.ts Mutation loginUser: something went wrong',
+        }
+      }
+    }
+  },
+
+  async createItem(
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    { input }: IItemInput,
+    // @ts-ignore: Make type
+    { dataSources: { itemsAPI }, user_id },
+  ): Promise<IItem | IItem[] | ItemError> {
+    try {
+      input.user_id = user_id
+      const resp = await itemsAPI.createItem({ input })
+      return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(`Mutation.ts Mutations createItem: ${error.message}`)
+        console.log(error.stack)
+        throw new Error(error.message)
+      } else {
+        return {
+          message:
+            'Resolvers Mutation.ts Mutation createItem: something went wrong',
         }
       }
     }
