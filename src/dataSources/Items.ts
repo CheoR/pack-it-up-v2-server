@@ -15,8 +15,6 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
   async createItem({
     input: { box_id, count, description, name, isFragile, user_id, value },
   }: IItemInput): Promise<IItem | IItem[] | ItemError> {
-    console.log('i am ehre')
-
     let resp: IItem[] = []
     if (!count) count = 1
 
