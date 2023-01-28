@@ -9,6 +9,7 @@ export const typeDefs = `#graphql
   }
 
   type Mutation {
+    createBox(input: CreateBoxInput!): [Box!]
     createItem(input: CreateItemInput!): [Item!]
     createMove(input: CreateMoveInput!): [Move!]
     registerUser(input: RegisterUserInput!): RegisteredUserResponse
@@ -44,6 +45,14 @@ export const typeDefs = `#graphql
     password: String!
     refreshToken: String! 
     username: String!
+  }
+
+  type Box {
+    _id: ID!
+    description: String
+    name: String!
+    move_id: String!
+    user_id: String!
   }
 
   type Move {
@@ -84,6 +93,13 @@ export const typeDefs = `#graphql
 
   type UpdateResponse {
     ok: Boolean!
+  }
+
+  input CreateBoxInput {
+    count: Int
+    description: String
+    move_id: ID!
+    name: String!
   }
 
   input CreateMoveInput {
