@@ -2,8 +2,10 @@ import { ApolloError } from 'apollo-server-errors'
 import { GraphQLError } from 'graphql'
 
 import { DeleteResponse, UpdateResponse } from '../types/utils'
-import { comparePromise, setTokens } from '../auth/jwt'
+import { IItem, IItemInput, ItemError } from '../types/item'
 import { IMove, IMoveInput, MoveError } from '../types/move'
+import { IBox, IBoxInput, BoxError } from '../types/box'
+import { comparePromise, setTokens } from '../auth/jwt'
 import {
   IRefreshTokenResponse,
   RefreshTokenError,
@@ -16,7 +18,6 @@ import {
   IRegisterUserInput,
   UserError,
 } from '../types/user'
-import { IItem, IItemInput, ItemError } from '../types/item'
 
 export const Mutation = {
   async loginUser(
@@ -55,6 +56,32 @@ export const Mutation = {
         return {
           message:
             'Resolvers Mutation.ts Mutation loginUser: something went wrong',
+        }
+      }
+    }
+  },
+
+  async createBox(
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    { input }: IBoxInput,
+    // @ts-ignore: Make type
+    { dataSources: { boxesAPI }, user_id },
+  ): Promise<IBox | IBox[] | BoxError> {
+    try {
+      input.user_id = user_id
+      const resp = await boxesAPI.createBox({ input })
+      return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(`Mutation.ts Mutations createBox: ${error.message}`)
+        console.log(error.stack)
+        throw new Error(error.message)
+      } else {
+        return {
+          message:
+            'Resolvers Mutation.ts Mutation createBox: something went wrong',
         }
       }
     }
