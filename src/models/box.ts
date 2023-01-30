@@ -35,4 +35,10 @@ BoxSchema.virtual('itemsCount', {
   count: true, // And only get the number of docs
 })
 
+BoxSchema.virtual('itemsSum', {
+  ref: 'Item',
+  localField: '_id',
+  foreignField: 'box_id',
+})
+
 export const Box: Model<IBox> = model<IBox>('Box', BoxSchema)

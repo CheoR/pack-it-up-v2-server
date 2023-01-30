@@ -55,6 +55,7 @@ export const typeDefs = `#graphql
     move_id: String!
     user_id: String!
     itemsCount: Int
+    total: Float
   }
 
   type Move {

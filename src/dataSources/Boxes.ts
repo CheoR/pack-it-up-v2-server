@@ -54,7 +54,19 @@ export default class BoxesAPI extends MongoDataSource<IBox> {
   }
 
   async getBoxesByUserId(user_id: string) {
-    const resp = await this.model.find({ user_id }).populate('itemsCount')
+    const resp = await this.model.find({ user_id })
+      .populate('itemsCount')
+      .populate('itemsSum')
+
+    // TODO: use utility type to get correct type for this
+    // TODO: move to virtual or method
+    resp.forEach(
+      (obj: any) =>
+        (obj.total = obj.itemsSum.reduce(
+          (acc: number, curr: any) => acc + curr.value,
+          0,
+        )),
+    )
 
     return resp
   }
