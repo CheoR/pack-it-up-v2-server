@@ -41,4 +41,10 @@ BoxSchema.virtual('itemsSum', {
   foreignField: 'box_id',
 })
 
+BoxSchema.virtual('itemsFragile', {
+  ref: 'Item',
+  localField: '_id',
+  foreignField: 'box_id',
+})
+
 export const Box: Model<IBox> = model<IBox>('Box', BoxSchema)

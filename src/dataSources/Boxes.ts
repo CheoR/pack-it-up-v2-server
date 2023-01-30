@@ -57,15 +57,21 @@ export default class BoxesAPI extends MongoDataSource<IBox> {
     const resp = await this.model.find({ user_id })
       .populate('itemsCount')
       .populate('itemsSum')
+      .populate('itemsFragile')
 
     // TODO: use utility type to get correct type for this
     // TODO: move to virtual or method
     resp.forEach(
-      (obj: any) =>
-        (obj.total = obj.itemsSum.reduce(
+      (box: any) =>
+        (box.total = box.itemsSum.reduce(
           (acc: number, curr: any) => acc + curr.value,
           0,
         )),
+    )
+
+    resp.forEach(
+      (box: any) =>
+        (box.isFragile = box.itemsFragile.some((item: any) => item.isFragile)),
     )
 
     return resp
