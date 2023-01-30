@@ -28,4 +28,11 @@ const BoxSchema: Schema = new Schema<IBox>({
   },
 })
 
+BoxSchema.virtual('itemsCount', {
+  ref: 'Item', // The model to use
+  localField: '_id', // Find people where `localField`
+  foreignField: 'box_id', // is equal to `foreignField`
+  count: true, // And only get the number of docs
+})
+
 export const Box: Model<IBox> = model<IBox>('Box', BoxSchema)
