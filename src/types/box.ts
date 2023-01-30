@@ -10,8 +10,7 @@ export interface IBox extends Document {
 
   // virtual
   itemsCount: number
-  itemsSum: number
-  itemsFragile: boolean
+  itemsData: void
 }
 
 export interface IBoxInput {

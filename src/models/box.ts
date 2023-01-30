@@ -35,13 +35,7 @@ BoxSchema.virtual('itemsCount', {
   count: true, // And only get the number of docs
 })
 
-BoxSchema.virtual('itemsSum', {
-  ref: 'Item',
-  localField: '_id',
-  foreignField: 'box_id',
-})
-
-BoxSchema.virtual('itemsFragile', {
+BoxSchema.virtual('itemsData', {
   ref: 'Item',
   localField: '_id',
   foreignField: 'box_id',
