@@ -52,7 +52,7 @@ export default class MovesAPI extends MongoDataSource<IMove> {
   }
 
   async getMovesByUserId(user_id: string) {
-    const resp = await this.model.find({ user_id }).exec()
+    const resp = await this.model.find({ user_id }).populate('boxesCount')
     return resp
   }
 

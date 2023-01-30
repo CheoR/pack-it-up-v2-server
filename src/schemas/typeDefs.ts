@@ -65,6 +65,8 @@ export const typeDefs = `#graphql
     description: String
     name: String!
     user_id: String!
+    # virtual
+    boxesCount: Int
   }
 
   type Item {

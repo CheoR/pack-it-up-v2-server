@@ -4,6 +4,9 @@ export interface IMove extends Document {
   name: string
   description: string
   user_id: Types.ObjectId
+
+  // virtual
+  boxesCount: number
 }
 
 export interface IMoveInput {

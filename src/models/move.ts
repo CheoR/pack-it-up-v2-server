@@ -23,4 +23,11 @@ const MoveSchema: Schema = new Schema<IMove>({
   },
 })
 
+MoveSchema.virtual('boxesCount', {
+  ref: 'Box',
+  localField: '_id',
+  foreignField: 'move_id',
+  count: true,
+})
+
 export const Move: Model<IMove> = model<IMove>('Move', MoveSchema)
