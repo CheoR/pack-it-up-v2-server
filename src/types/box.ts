@@ -7,6 +7,9 @@ export interface IBox extends Document {
   move_id: Types.ObjectId
   name: string
   user_id: Types.ObjectId
+
+  // virtual
+  itemsCount: number
 }
 
 export interface IBoxInput {
