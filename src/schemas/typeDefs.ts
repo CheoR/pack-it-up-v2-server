@@ -1,11 +1,12 @@
 export const typeDefs = `#graphql
 
   type Query {
-    getUser(input: UserIdInput!): User
-    getMove(input: MoveIdInput!): Move
     getBoxesByUserId: [Box!]!
     getItemsByUserId: [Item!]!
+    getHomeData: SummaryData
+    getMove(input: MoveIdInput!): Move
     getMovesByUserId: [Move!]!
+    getUser(input: UserIdInput!): User
     users: [User!]!
   }
 
@@ -20,6 +21,17 @@ export const typeDefs = `#graphql
     saveToken(input: SaveTokenInput!): UpdateResponse
     updateMove(input: MoveIdInput!, update: MoveUpdateInput): UpdateResponse
     updateUser(input: UserIdInput!, update: UserUpdateInput): UpdateResponse
+  }
+
+  type HomeData {
+    id: String
+    count: Int
+    total: Float
+    isFragile: Boolean
+  }
+
+  type SummaryData {
+    data: [HomeData]
   }
 
   type Tokens {
@@ -69,6 +81,7 @@ export const typeDefs = `#graphql
     boxesCount: Int
     total: Float
     isFragile: Boolean
+    itemsCount: Int
   }
 
   type Item {

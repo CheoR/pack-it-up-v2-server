@@ -72,7 +72,6 @@ export default class MovesAPI extends MongoDataSource<IMove> {
       })
     })
 
-    resp.forEach((move: any) => console.log(move))
     return resp
   }
 
