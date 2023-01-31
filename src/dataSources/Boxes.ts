@@ -2,6 +2,7 @@ import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { GraphQLError } from 'graphql'
 
 import { IBox, IBoxInput, BoxError } from '../types/box'
+import { IItem } from '../types/item'
 import { Box } from '../models/box'
 
 export default class BoxesAPI extends MongoDataSource<IBox> {
@@ -63,10 +64,11 @@ export default class BoxesAPI extends MongoDataSource<IBox> {
     // TODO: move to virtual or method
     resp.forEach((box: any) => {
       box.total = box.itemsData.reduce(
-        (acc: number, curr: any) => acc + curr.value,
+        (acc: number, curr: IItem) => acc + curr.value,
         0,
       )
-      box.isFragile = box.itemsData.some((item: any) => item.isFragile)
+      box.total = box.total || 0
+      box.isFragile = box.itemsData.some((item: IItem) => item.isFragile)
     })
 
     return resp

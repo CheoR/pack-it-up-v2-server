@@ -1,3 +1,5 @@
+import { IItem } from '../types/item'
+
 export const Query = {
   // @ts-ignore: Make type
   getBoxesByUserId: async (
@@ -33,8 +35,11 @@ export const Query = {
     const items = await itemsAPI.getItemsByUserId(user_id)
     const boxes = await boxesAPI.getBoxesByUserId(user_id)
     const moves = await movesAPI.getMovesByUserId(user_id)
-    const total = items.reduce((acc: any, curr: any) => acc + curr.value, 0)
-    const isFragile = items.some((item: any) => item.isFragile)
+    const total = items.reduce(
+      (acc: number, curr: IItem) => acc + curr.value,
+      0,
+    )
+    const isFragile = items.some((item: IItem) => item.isFragile)
 
     return {
       data: [
