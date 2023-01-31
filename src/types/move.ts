@@ -7,6 +7,7 @@ export interface IMove extends Document {
 
   // virtual
   boxesCount: number
+  boxesData: void
 }
 
 export interface IMoveInput {

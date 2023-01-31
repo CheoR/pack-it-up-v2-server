@@ -67,6 +67,8 @@ export const typeDefs = `#graphql
     user_id: String!
     # virtual
     boxesCount: Int
+    total: Float
+    isFragile: Boolean
   }
 
   type Item {
