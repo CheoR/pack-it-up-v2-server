@@ -16,6 +16,7 @@ export const typeDefs = `#graphql
     createMove(input: CreateMoveInput!): [Move!]
     registerUser(input: RegisterUserInput!): RegisteredUserResponse
     loginUser(input: LoginUserInput!): Tokens
+    removeItem(input: ItemIdInput!): DeleteResponse
     removeMove(input: MoveIdInput!): DeleteResponse
     removeUser(input: UserIdInput!): DeleteResponse
     saveToken(input: SaveTokenInput!): UpdateResponse
@@ -145,6 +146,10 @@ export const typeDefs = `#graphql
     description: String
     name: String!
     move_id: ID!
+  }
+
+  input ItemIdInput {
+    _id: ID!
   }
 
   input ItemUpdateInput {

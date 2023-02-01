@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-server-errors'
 import { GraphQLError } from 'graphql'
 
-import { IItem, IItemInput, IItemUpdateInput, ItemError } from '../types/item'
+import { IItem, IItemIdInput, IItemInput, IItemUpdateInput, ItemError } from '../types/item'
 import { DeleteResponse, UpdateResponse } from '../types/utils'
 import { IMove, IMoveInput, IMoveUpdateInput, MoveError } from '../types/move'
 import { IBox, IBoxInput, BoxError, IBoxUpdateInput } from '../types/box'
@@ -195,6 +195,26 @@ export const Mutation = {
           message:
             'Resolvers Mutation.ts Mutation registerUser: something went wrong',
         }
+      }
+    }
+  },
+
+  async removeItem(
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    { input }: IItemIdInput,
+    // @ts-ignore: Make type
+    { dataSources: { itemsAPI } },
+  ): Promise<DeleteResponse | MoveError> {
+    try {
+      await itemsAPI.removeItem({ input })
+      return { ok: true }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return error
+      } else {
+        throw new Error(`Mutation error: ${error}`)
       }
     }
   },

@@ -35,6 +35,12 @@ export interface IItemUpdateInput {
   }
 }
 
+export interface IItemIdInput {
+  input: {
+    _id: Types.ObjectId
+  }
+}
+
 export type ItemError = {
   message: string | ErrorMessages
   resolution?: string | undefined

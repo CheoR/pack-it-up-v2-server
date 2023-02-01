@@ -1,7 +1,14 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { GraphQLError } from 'graphql'
 
-import { IItem, IItemInput, IItemUpdateInput, ItemError } from '../types/item'
+import { DeleteResponse } from '../types/utils'
+import {
+  IItem,
+  IItemIdInput,
+  IItemInput,
+  IItemUpdateInput,
+  ItemError,
+} from '../types/item'
 import { Item } from '../models/item'
 
 export default class ItemsAPI extends MongoDataSource<IItem> {
@@ -74,6 +81,24 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
         // throw new Error(`Could not update item: ${error.message}`)
       } else {
         throw new Error('Coult not update item - other than Error')
+      }
+    }
+  }
+
+  async removeItem({
+    input,
+  }: IItemIdInput): Promise<DeleteResponse | ItemError | null> {
+    try {
+      const resp = await this.model.deleteOne({ _id: input._id })
+      return { ok: true }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new GraphQLError(`Could not delete item: ${error.message}`, {
+          extensions: { code: 'FORBIDDEN', http: { status: 400 } },
+        })
+        // throw new Error(`Could not delete item: ${error.message}`)
+      } else {
+        throw new Error('Coult not delete item - other than Error')
       }
     }
   }
