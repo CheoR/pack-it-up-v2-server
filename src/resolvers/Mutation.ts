@@ -3,7 +3,7 @@ import { GraphQLError } from 'graphql'
 
 import { IItem, IItemInput, IItemUpdateInput, ItemError } from '../types/item'
 import { DeleteResponse, UpdateResponse } from '../types/utils'
-import { IMove, IMoveInput, MoveError } from '../types/move'
+import { IMove, IMoveInput, IMoveUpdateInput, MoveError } from '../types/move'
 import { IBox, IBoxInput, BoxError, IBoxUpdateInput } from '../types/box'
 import { comparePromise, setTokens } from '../auth/jwt'
 import {
@@ -271,7 +271,7 @@ export const Mutation = {
     // @ts-ignore: Make type
     parent,
     // @ts-ignore: Make type
-    { input }: IItemUpdateInput,
+    { input }: IMoveUpdateInput,
     // @ts-ignore: Make type
     { dataSources: { itemsAPI }, user_id },
   ): Promise<IItem | IItem[] | ItemError> {
@@ -295,6 +295,28 @@ export const Mutation = {
     }
   },
 
+  async updateMove(
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    { input },
+    // @ts-ignore: Make type
+    { dataSources: { movesAPI } },
+  ): Promise<IMove | IMove[] | MoveError> {
+    try {
+      const resp = await movesAPI.updateMove({
+        input,
+      })
+      return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return error
+      } else {
+        throw new Error(`Mutation error: ${error}`)
+      }
+    }
+  },
+
   async updateUser(
     // @ts-ignore: Make type
     parent,
@@ -305,25 +327,6 @@ export const Mutation = {
   ): Promise<UpdateResponse | UserError> {
     try {
       await usersAPI.updateUser(_id, update)
-      return { ok: true }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        return error
-      } else {
-        throw new Error(`Mutation error: ${error}`)
-      }
-    }
-  },
-  async updateMove(
-    // @ts-ignore: Make type
-    parent,
-    // @ts-ignore: Make type
-    { input: { _id }, update },
-    // @ts-ignore: Make type
-    { dataSources: { movesAPI } },
-  ): Promise<UpdateResponse | MoveError> {
-    try {
-      await movesAPI.updateMove(_id, update)
       return { ok: true }
     } catch (error: unknown) {
       if (error instanceof Error) {

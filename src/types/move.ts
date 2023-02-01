@@ -20,6 +20,15 @@ export interface IMoveInput {
   }
 }
 
+export interface IMoveUpdateInput {
+  input: {
+    _id: Types.ObjectId
+    description: string
+    name: string
+    user_id: Types.ObjectId
+  }
+}
+
 export type MoveError = {
   message: string | ErrorMessages
   resolution?: string | undefined

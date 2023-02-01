@@ -21,8 +21,8 @@ export const typeDefs = `#graphql
     saveToken(input: SaveTokenInput!): UpdateResponse
     updateBox(input: BoxUpdateInput!): Box
     updateItem(input: ItemUpdateInput!): Item
-    updateMove(input: MoveIdInput!, update: MoveUpdateInput): UpdateResponse
-    updateUser(input: UserIdInput!, update: UserUpdateInput): UpdateResponse
+    updateMove(input: MoveUpdateInput!): Move
+    updateUser(input: UserUpdateInput!): User
   }
 
   type HomeData {
@@ -160,13 +160,14 @@ export const typeDefs = `#graphql
     _id: ID!
   }
 
-  input UserIdInput {
-    user_id: ID!
+  input MoveUpdateInput {
+    _id: ID!
+    description: String
+    name: String!
   }
 
-  input MoveUpdateInput {
-    description: String
-    name: String
+  input UserIdInput {
+    user_id: ID!
   }
 
   input UserUpdateInput {
