@@ -23,6 +23,18 @@ export interface IItemInput {
   }
 }
 
+export interface IItemUpdateInput {
+  input: {
+    _id: Types.ObjectId
+    box_id: Types.ObjectId
+    description: string
+    isFragile: boolean
+    name: string
+    user_id: Types.ObjectId
+    value: number
+  }
+}
+
 export type ItemError = {
   message: string | ErrorMessages
   resolution?: string | undefined

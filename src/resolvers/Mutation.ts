@@ -1,8 +1,8 @@
 import { ApolloError } from 'apollo-server-errors'
 import { GraphQLError } from 'graphql'
 
+import { IItem, IItemInput, IItemUpdateInput, ItemError } from '../types/item'
 import { DeleteResponse, UpdateResponse } from '../types/utils'
-import { IItem, IItemInput, ItemError } from '../types/item'
 import { IMove, IMoveInput, MoveError } from '../types/move'
 import { IBox, IBoxInput, BoxError } from '../types/box'
 import { comparePromise, setTokens } from '../auth/jwt'
@@ -235,6 +235,34 @@ export const Mutation = {
         return error
       } else {
         throw new Error(`Mutation error: ${error}`)
+      }
+    }
+  },
+
+  async updateItem(
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    { input }: IItemUpdateInput,
+    // @ts-ignore: Make type
+    { dataSources: { itemsAPI }, user_id },
+  ): Promise<IItem | IItem[] | ItemError> {
+    try {
+      input.user_id = user_id
+      const resp = await itemsAPI.updateItem({
+        input,
+      })
+      return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(`Mutation.ts Mutations updateItem: ${error.message}`)
+        console.log(error.stack)
+        throw new Error(error.message)
+      } else {
+        return {
+          message:
+            'Resolvers Mutation.ts Mutation updateItem: something went wrong',
+        }
       }
     }
   },

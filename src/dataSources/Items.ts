@@ -1,7 +1,7 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { GraphQLError } from 'graphql'
 
-import { IItem, IItemInput, ItemError } from '../types/item'
+import { IItem, IItemInput, IItemUpdateInput, ItemError } from '../types/item'
 import { Item } from '../models/item'
 
 export default class ItemsAPI extends MongoDataSource<IItem> {
@@ -53,6 +53,27 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
         // throw new Error(`Could not create item: ${error.message}`)
       } else {
         throw new Error('Coult not create item - other than Error')
+      }
+    }
+  }
+
+  async updateItem({
+    input,
+  }: IItemUpdateInput): Promise<IItem | ItemError | null> {
+    const filter = { _id: input._id }
+    const options = { returnOriginal: false }
+
+    try {
+      const resp = await this.model.findOneAndUpdate(filter, input, options)
+      return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new GraphQLError(`Could not update item: ${error.message}`, {
+          extensions: { code: 'FORBIDDEN', http: { status: 400 } },
+        })
+        // throw new Error(`Could not update item: ${error.message}`)
+      } else {
+        throw new Error('Coult not update item - other than Error')
       }
     }
   }
