@@ -44,15 +44,15 @@ export const Query = {
     return {
       data: [
         {
-          id: 'move',
+          _id: 'move',
           count: moves.length || 0,
         },
         {
-          id: 'box',
+          _id: 'box',
           count: boxes.length || 0,
         },
         {
-          id: 'item',
+          _id: 'item',
           count: items.length || 0,
           total: total || 0,
           isFragile,
