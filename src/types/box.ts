@@ -9,8 +9,9 @@ export interface IBox extends Document {
   user_id: Types.ObjectId
 
   // virtual
-  itemsCount: number
-  itemsData: void
+  count: number
+  isFragile: boolean
+  total: number
 }
 
 export interface IBoxInput {
