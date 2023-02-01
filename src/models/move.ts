@@ -23,17 +23,30 @@ const MoveSchema: Schema = new Schema<IMove>({
   },
 })
 
-MoveSchema.virtual('boxesCount', {
+MoveSchema.virtual('count', {
   ref: 'Box',
   localField: '_id',
   foreignField: 'move_id',
   count: true,
 })
 
-MoveSchema.virtual('boxesData', {
+MoveSchema.virtual('isFragile', {
   ref: 'Box',
   localField: '_id',
   foreignField: 'move_id',
+}).get(function (boxes) {
+  const isFragile = boxes?.some((box: any) => box.isFragile) || false
+  return isFragile
+})
+
+MoveSchema.virtual('total', {
+  ref: 'Box',
+  localField: '_id',
+  foreignField: 'move_id',
+}).get(function (boxes) {
+  const total =
+    boxes?.reduce((acc: number, curr: any) => acc + curr.total, 0) || 0
+  return total
 })
 
 export const Move: Model<IMove> = model<IMove>('Move', MoveSchema)
