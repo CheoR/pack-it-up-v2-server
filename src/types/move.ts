@@ -6,8 +6,9 @@ export interface IMove extends Document {
   user_id: Types.ObjectId
 
   // virtual
-  boxesCount: number
-  boxesData: void
+  count: number
+  isFragile: boolean
+  total: number
 }
 
 export interface IMoveInput {
