@@ -52,25 +52,19 @@ export default class MovesAPI extends MongoDataSource<IMove> {
   }
 
   async getMovesByUserId(user_id: string) {
-    const resp = await this.model
-      .find({ user_id })
-      .populate('boxesCount')
-      .populate({
-        path: 'boxesData',
-        populate: {
-          path: 'itemsData',
-        },
-      })
-
-    resp.forEach((move: any) => {
-      move.boxesData?.forEach((box: any) => {
-        move.total = box.itemsData.reduce(
-          (acc: number, curr: any) => acc + curr.value,
-          0,
-        )
-        move.isFragile = box.itemsData.some((item: any) => item.isFragile)
-      })
-    })
+    const resp = await this.model.find({ user_id }).populate([
+      {
+        path: 'count',
+      },
+      {
+        path: 'isFragile',
+        populate: { path: 'isFragile' },
+      },
+      {
+        path: 'total',
+        populate: { path: 'total' },
+      },
+    ])
 
     return resp
   }
