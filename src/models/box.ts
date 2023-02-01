@@ -1,4 +1,5 @@
 import { model, Model, Schema } from 'mongoose'
+import { IItem } from '../types/item'
 import { IBox } from '../types/box'
 
 const BoxSchema: Schema = new Schema<IBox>({
@@ -28,17 +29,30 @@ const BoxSchema: Schema = new Schema<IBox>({
   },
 })
 
-BoxSchema.virtual('itemsCount', {
+BoxSchema.virtual('count', {
   ref: 'Item', // The model to use
   localField: '_id', // Find people where `localField`
   foreignField: 'box_id', // is equal to `foreignField`
   count: true, // And only get the number of docs
 })
 
-BoxSchema.virtual('itemsData', {
+BoxSchema.virtual('isFragile', {
   ref: 'Item',
   localField: '_id',
   foreignField: 'box_id',
+}).get(function (items) {
+  const isFragile = items?.some((item: IItem) => item.isFragile) || false
+  return isFragile
+})
+
+BoxSchema.virtual('total', {
+  ref: 'Item',
+  localField: '_id',
+  foreignField: 'box_id',
+}).get(function (items) {
+  const total =
+    items?.reduce((acc: number, curr: IItem) => acc + curr.value, 0) || 0
+  return total
 })
 
 export const Box: Model<IBox> = model<IBox>('Box', BoxSchema)
