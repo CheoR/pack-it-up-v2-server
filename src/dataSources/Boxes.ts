@@ -2,7 +2,6 @@ import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { GraphQLError } from 'graphql'
 
 import { IBox, IBoxInput, BoxError } from '../types/box'
-import { IItem } from '../types/item'
 import { Box } from '../models/box'
 
 export default class BoxesAPI extends MongoDataSource<IBox> {
@@ -55,22 +54,17 @@ export default class BoxesAPI extends MongoDataSource<IBox> {
   }
 
   async getBoxesByUserId(user_id: string) {
-    const resp = await this.model
-      .find({ user_id })
-      .populate('itemsCount')
-      .populate('itemsData')
-
-    // TODO: use utility type to get correct type for this
-    // TODO: move to virtual or method
-    resp.forEach((box: any) => {
-      box.total = box.itemsData.reduce(
-        (acc: number, curr: IItem) => acc + curr.value,
-        0,
-      )
-      box.total = box.total || 0
-      box.isFragile = box.itemsData.some((item: IItem) => item.isFragile)
-    })
-
+    const resp = await this.model.find({ user_id }).populate([
+      {
+        path: 'count',
+      },
+      {
+        path: 'isFragile',
+      },
+      {
+        path: 'total',
+      },
+    ])
     return resp
   }
 }
