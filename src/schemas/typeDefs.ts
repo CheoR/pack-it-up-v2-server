@@ -19,6 +19,7 @@ export const typeDefs = `#graphql
     removeMove(input: MoveIdInput!): DeleteResponse
     removeUser(input: UserIdInput!): DeleteResponse
     saveToken(input: SaveTokenInput!): UpdateResponse
+    updateBox(input: BoxUpdateInput!): Box
     updateItem(input: ItemUpdateInput!): Item
     updateMove(input: MoveIdInput!, update: MoveUpdateInput): UpdateResponse
     updateUser(input: UserIdInput!, update: UserUpdateInput): UpdateResponse
@@ -137,6 +138,13 @@ export const typeDefs = `#graphql
     isFragile: Boolean
     name: String!
     value: Float
+  }
+
+  input BoxUpdateInput {
+    _id: ID!
+    description: String
+    name: String!
+    move_id: ID!
   }
 
   input ItemUpdateInput {

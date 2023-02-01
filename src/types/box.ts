@@ -24,6 +24,16 @@ export interface IBoxInput {
   }
 }
 
+export interface IBoxUpdateInput {
+  input: {
+    _id: Types.ObjectId
+    description: string
+    move_id: Types.ObjectId
+    name: string
+    user_id: Types.ObjectId
+  }
+}
+
 export type BoxError = {
   message: string | ErrorMessages
   resolution?: string | undefined

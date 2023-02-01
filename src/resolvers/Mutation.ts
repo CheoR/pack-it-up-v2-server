@@ -4,7 +4,7 @@ import { GraphQLError } from 'graphql'
 import { IItem, IItemInput, IItemUpdateInput, ItemError } from '../types/item'
 import { DeleteResponse, UpdateResponse } from '../types/utils'
 import { IMove, IMoveInput, MoveError } from '../types/move'
-import { IBox, IBoxInput, BoxError } from '../types/box'
+import { IBox, IBoxInput, BoxError, IBoxUpdateInput } from '../types/box'
 import { comparePromise, setTokens } from '../auth/jwt'
 import {
   IRefreshTokenResponse,
@@ -235,6 +235,34 @@ export const Mutation = {
         return error
       } else {
         throw new Error(`Mutation error: ${error}`)
+      }
+    }
+  },
+
+  async updateBox(
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    { input }: IBoxUpdateInput,
+    // @ts-ignore: Make type
+    { dataSources: { boxesAPI }, user_id },
+  ): Promise<IBox | IBox[] | BoxError> {
+    try {
+      input.user_id = user_id
+      const resp = await boxesAPI.updateBox({
+        input,
+      })
+      return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(`Mutation.ts Mutations updateBox: ${error.message}`)
+        console.log(error.stack)
+        throw new Error(error.message)
+      } else {
+        return {
+          message:
+            'Resolvers Mutation.ts Mutation updateBox: something went wrong',
+        }
       }
     }
   },

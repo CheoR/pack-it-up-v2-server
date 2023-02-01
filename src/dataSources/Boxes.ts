@@ -1,7 +1,7 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { GraphQLError } from 'graphql'
 
-import { IBox, IBoxInput, BoxError } from '../types/box'
+import { IBox, IBoxInput, IBoxUpdateInput, BoxError } from '../types/box'
 import { Box } from '../models/box'
 
 export default class BoxesAPI extends MongoDataSource<IBox> {
@@ -66,5 +66,24 @@ export default class BoxesAPI extends MongoDataSource<IBox> {
       },
     ])
     return resp
+  }
+
+  async updateBox({ input }: IBoxUpdateInput): Promise<IBox | BoxError | null> {
+    const filter = { _id: input._id }
+    const options = { returnOriginal: false }
+
+    try {
+      const resp = await this.model.findOneAndUpdate(filter, input, options)
+      return resp
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new GraphQLError(`Could not update Box: ${error.message}`, {
+          extensions: { code: 'FORBIDDEN', http: { status: 400 } },
+        })
+        // throw new Error(`Could not update Box: ${error.message}`)
+      } else {
+        throw new Error('Coult not update Box - other than Error')
+      }
+    }
   }
 }
