@@ -2,12 +2,13 @@ import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { GraphQLError } from 'graphql'
 import { Move } from '../models/move'
 
+import { DeleteResponse } from '../types/utils'
 import {
-  ErrorMessages,
   IMove,
-  IMoveInput,
-  IMoveUpdateInput,
   MoveError,
+  IMoveInput,
+  IMoveIdInput,
+  IMoveUpdateInput,
 } from '../types/move'
 
 export default class MovesAPI extends MongoDataSource<IMove> {
@@ -75,21 +76,22 @@ export default class MovesAPI extends MongoDataSource<IMove> {
     return resp
   }
 
-  async removeMove(_id: string) {
+  async removeMove({
+    input,
+  }: IMoveIdInput): Promise<DeleteResponse | MoveError | null> {
     try {
-      const resp = await this.model.deleteOne({ _id })
-      // even if user does not exist
-      // would not throw error because deletedCount is just 0
-      if (resp.deletedCount) {
-        return resp
-      } else {
-        throw new Error(ErrorMessages.DeleteError)
-      }
+      const doc = await this.model.findOne({ _id: input._id })
+      await doc?.deleteOne()
+
+      return { ok: true }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(ErrorMessages.DeleteError)
+        throw new GraphQLError(`Could not delete Move: ${error.message}`, {
+          extensions: { code: 'FORBIDDEN', http: { status: 400 } },
+        })
+        // throw new Error(`Could not delete Move: ${error.message}`)
       } else {
-        throw new Error(`dataSources error: ${error}`)
+        throw new Error('Coult not delete Move - other than Error')
       }
     }
   }

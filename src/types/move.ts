@@ -29,6 +29,12 @@ export interface IMoveUpdateInput {
   }
 }
 
+export interface IMoveIdInput {
+  input: {
+    _id: Types.ObjectId
+  }
+}
+
 export type MoveError = {
   message: string | ErrorMessages
   resolution?: string | undefined

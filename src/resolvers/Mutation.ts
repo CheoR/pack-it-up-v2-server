@@ -1,11 +1,29 @@
 import { ApolloError } from 'apollo-server-errors'
 import { GraphQLError } from 'graphql'
 
-import { IItem, IItemIdInput, IItemInput, IItemUpdateInput, ItemError } from '../types/item'
 import { DeleteResponse, UpdateResponse } from '../types/utils'
-import { IMove, IMoveInput, IMoveUpdateInput, MoveError } from '../types/move'
-import { IBox, IBoxInput, BoxError, IBoxUpdateInput, IBoxIdInput } from '../types/box'
 import { comparePromise, setTokens } from '../auth/jwt'
+import {
+  IItem,
+  ItemError,
+  IItemIdInput,
+  IItemInput,
+  IItemUpdateInput,
+} from '../types/item'
+import {
+  IMove,
+  MoveError,
+  IMoveIdInput,
+  IMoveInput,
+  IMoveUpdateInput,
+} from '../types/move'
+import {
+  IBox,
+  IBoxInput,
+  BoxError,
+  IBoxUpdateInput,
+  IBoxIdInput,
+} from '../types/box'
 import {
   IRefreshTokenResponse,
   RefreshTokenError,
@@ -14,8 +32,8 @@ import {
 import {
   ErrorMessages,
   ILoginUserInput,
-  IRegisterUserResponse,
   IRegisterUserInput,
+  IRegisterUserResponse,
   UserError,
 } from '../types/user'
 
@@ -243,12 +261,12 @@ export const Mutation = {
     // @ts-ignore: Make type
     parent,
     // @ts-ignore: Make type
-    { input: { _id } },
+    { input }: IMoveIdInput,
     // @ts-ignore: Make type
     { dataSources: { movesAPI } },
   ): Promise<DeleteResponse | MoveError> {
     try {
-      await movesAPI.removeMove(_id)
+      await movesAPI.removeMove({ input })
       return { ok: true }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -311,7 +329,7 @@ export const Mutation = {
     // @ts-ignore: Make type
     parent,
     // @ts-ignore: Make type
-    { input }: IMoveUpdateInput,
+    { input }: IItemUpdateInput,
     // @ts-ignore: Make type
     { dataSources: { itemsAPI }, user_id },
   ): Promise<IItem | IItem[] | ItemError> {
@@ -339,7 +357,7 @@ export const Mutation = {
     // @ts-ignore: Make type
     parent,
     // @ts-ignore: Make type
-    { input },
+    { input }: IMoveUpdateInput,
     // @ts-ignore: Make type
     { dataSources: { movesAPI } },
   ): Promise<IMove | IMove[] | MoveError> {
