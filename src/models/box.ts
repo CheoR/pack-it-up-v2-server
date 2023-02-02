@@ -1,6 +1,7 @@
 import { model, Model, Schema } from 'mongoose'
 import { IItem } from '../types/item'
 import { IBox } from '../types/box'
+import { Item } from './item'
 
 const BoxSchema: Schema = new Schema<IBox>({
   description: {
@@ -53,6 +54,13 @@ BoxSchema.virtual('total', {
   const total =
     items?.reduce((acc: number, curr: IItem) => acc + curr.value, 0) || 0
   return total
+})
+
+BoxSchema.pre('deleteOne', { document: true, query: false }, async function () {
+  // this instanceof mongoose.Query; // true
+  // In deleteOne() and deleteMany() middleware, this is the
+  // Mongoose Query object, not the document(s) being deleted.
+  await Item.deleteMany({ box_id: this._id })
 })
 
 export const Box: Model<IBox> = model<IBox>('Box', BoxSchema)

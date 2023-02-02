@@ -79,7 +79,9 @@ export default class BoxesAPI extends MongoDataSource<IBox> {
     input,
   }: IBoxIdInput): Promise<DeleteResponse | BoxError | null> {
     try {
-      const resp = await this.model.deleteOne({ _id: input._id })
+      const doc = await this.model.findOne({ _id: input._id })
+      await doc?.deleteOne()
+
       return { ok: true }
     } catch (error: unknown) {
       if (error instanceof Error) {
