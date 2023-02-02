@@ -17,6 +17,7 @@ export const typeDefs = `#graphql
     registerUser(input: RegisterUserInput!): RegisteredUserResponse
     loginUser(input: LoginUserInput!): Tokens
     removeItem(input: ItemIdInput!): DeleteResponse
+    removeBox(input: BoxIdInput!): DeleteResponse
     removeMove(input: MoveIdInput!): DeleteResponse
     removeUser(input: UserIdInput!): DeleteResponse
     saveToken(input: SaveTokenInput!): UpdateResponse
@@ -139,6 +140,10 @@ export const typeDefs = `#graphql
     isFragile: Boolean
     name: String!
     value: Float
+  }
+
+  input BoxIdInput {
+    _id: ID!
   }
 
   input BoxUpdateInput {

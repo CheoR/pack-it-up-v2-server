@@ -4,7 +4,7 @@ import { GraphQLError } from 'graphql'
 import { IItem, IItemIdInput, IItemInput, IItemUpdateInput, ItemError } from '../types/item'
 import { DeleteResponse, UpdateResponse } from '../types/utils'
 import { IMove, IMoveInput, IMoveUpdateInput, MoveError } from '../types/move'
-import { IBox, IBoxInput, BoxError, IBoxUpdateInput } from '../types/box'
+import { IBox, IBoxInput, BoxError, IBoxUpdateInput, IBoxIdInput } from '../types/box'
 import { comparePromise, setTokens } from '../auth/jwt'
 import {
   IRefreshTokenResponse,
@@ -195,6 +195,26 @@ export const Mutation = {
           message:
             'Resolvers Mutation.ts Mutation registerUser: something went wrong',
         }
+      }
+    }
+  },
+
+  async removeBox(
+    // @ts-ignore: Make type
+    parent,
+    // @ts-ignore: Make type
+    { input }: IBoxIdInput,
+    // @ts-ignore: Make type
+    { dataSources: { boxesAPI } },
+  ): Promise<DeleteResponse | MoveError> {
+    try {
+      await boxesAPI.removeBox({ input })
+      return { ok: true }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return error
+      } else {
+        throw new Error(`Mutation error: ${error}`)
       }
     }
   },

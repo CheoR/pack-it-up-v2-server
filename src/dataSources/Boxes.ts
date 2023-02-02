@@ -1,7 +1,14 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { GraphQLError } from 'graphql'
 
-import { IBox, IBoxInput, IBoxUpdateInput, BoxError } from '../types/box'
+import { DeleteResponse } from '../types/utils'
+import {
+  IBox,
+  IBoxIdInput,
+  IBoxInput,
+  IBoxUpdateInput,
+  BoxError,
+} from '../types/box'
 import { Box } from '../models/box'
 
 export default class BoxesAPI extends MongoDataSource<IBox> {
@@ -66,6 +73,24 @@ export default class BoxesAPI extends MongoDataSource<IBox> {
       },
     ])
     return resp
+  }
+
+  async removeBox({
+    input,
+  }: IBoxIdInput): Promise<DeleteResponse | BoxError | null> {
+    try {
+      const resp = await this.model.deleteOne({ _id: input._id })
+      return { ok: true }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new GraphQLError(`Could not delete Box: ${error.message}`, {
+          extensions: { code: 'FORBIDDEN', http: { status: 400 } },
+        })
+        // throw new Error(`Could not delete Box: ${error.message}`)
+      } else {
+        throw new Error('Coult not delete Box - other than Error')
+      }
+    }
   }
 
   async updateBox({ input }: IBoxUpdateInput): Promise<IBox | BoxError | null> {
