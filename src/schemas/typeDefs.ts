@@ -31,7 +31,7 @@ export const typeDefs = `#graphql
     _id: ID
     count: Int
     isFragile: Boolean
-    total: Float
+    value: Float
   }
 
   type SummaryData {
@@ -73,7 +73,7 @@ export const typeDefs = `#graphql
     # virtual
     count: Int
     isFragile: Boolean
-    total: Float
+    value: Float
   }
 
   type Move {
@@ -84,7 +84,7 @@ export const typeDefs = `#graphql
     # virtual
     count: Int
     isFragile: Boolean
-    total: Float
+    value: Float
   }
 
   type Item {

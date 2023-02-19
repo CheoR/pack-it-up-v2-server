@@ -8,7 +8,7 @@ export interface IMove extends Document {
   // virtual
   count: number
   isFragile: boolean
-  total: number
+  value: number
 }
 
 export interface IMoveInput {

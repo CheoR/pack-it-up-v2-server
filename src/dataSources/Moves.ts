@@ -68,8 +68,8 @@ export default class MovesAPI extends MongoDataSource<IMove> {
         populate: { path: 'isFragile' },
       },
       {
-        path: 'total',
-        populate: { path: 'total' },
+        path: 'value',
+        populate: { path: 'value' },
       },
     ])
 

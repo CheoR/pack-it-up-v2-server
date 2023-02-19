@@ -46,14 +46,14 @@ BoxSchema.virtual('isFragile', {
   return isFragile
 })
 
-BoxSchema.virtual('total', {
+BoxSchema.virtual('value', {
   ref: 'Item',
   localField: '_id',
   foreignField: 'box_id',
 }).get(function (items) {
-  const total =
+  const value =
     items?.reduce((acc: number, curr: IItem) => acc + curr.value, 0) || 0
-  return total
+  return value
 })
 
 BoxSchema.pre('deleteOne', { document: true, query: false }, async function () {

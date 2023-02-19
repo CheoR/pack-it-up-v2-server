@@ -41,14 +41,14 @@ MoveSchema.virtual('isFragile', {
   return isFragile
 })
 
-MoveSchema.virtual('total', {
+MoveSchema.virtual('value', {
   ref: 'Box',
   localField: '_id',
   foreignField: 'move_id',
 }).get(function (boxes) {
-  const total =
-    boxes?.reduce((acc: number, curr: any) => acc + curr.total, 0) || 0
-  return total
+  const value =
+    boxes?.reduce((acc: number, curr: any) => acc + curr.value, 0) || 0
+  return value
 })
 
 MoveSchema.pre(

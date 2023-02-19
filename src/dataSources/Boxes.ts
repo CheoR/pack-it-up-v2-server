@@ -69,7 +69,7 @@ export default class BoxesAPI extends MongoDataSource<IBox> {
         path: 'isFragile',
       },
       {
-        path: 'total',
+        path: 'value',
       },
     ])
     return resp

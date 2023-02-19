@@ -35,7 +35,7 @@ export const Query = {
     const items = await itemsAPI.getItemsByUserId(user_id)
     const boxes = await boxesAPI.getBoxesByUserId(user_id)
     const moves = await movesAPI.getMovesByUserId(user_id)
-    const total = items.reduce(
+    const value = items.reduce(
       (acc: number, curr: IItem) => acc + curr.value,
       0,
     )
@@ -54,7 +54,7 @@ export const Query = {
         {
           _id: 'item',
           count: items.length || 0,
-          total: total || 0,
+          value: value || 0,
           isFragile,
         },
       ],
