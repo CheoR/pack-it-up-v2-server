@@ -1,8 +1,13 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb'
 import bcrypt from 'bcryptjs'
 
-import { IUserDocument, IRegisterUserInput, UserError, ErrorMessages } from '../types/user'
 import { SALT } from '../constants/constants'
+import {
+  ErrorMessages,
+  IRegisterUserInput,
+  IUserDocument,
+  UserError,
+} from '../types/user'
 
 // TODO: move to schema
 // Get field keys from User modle or move findByField to service
@@ -21,6 +26,7 @@ export default class UsersAPI extends MongoDataSource<IUserDocument> {
   }
 
   async getUsers() {
+    // @ts-ignore - for now
     const resp = await this.model.find()
     return resp
   }
@@ -46,6 +52,7 @@ export default class UsersAPI extends MongoDataSource<IUserDocument> {
     input,
   }: FindByField): Promise<IUserDocument | UserError | null> {
     try {
+      // @ts-ignore - for now
       const resp = await this.model.findOne({ [field]: input })
 
       return resp
@@ -68,6 +75,7 @@ export default class UsersAPI extends MongoDataSource<IUserDocument> {
     const hashedPassword = await bcrypt.hash(input.password, salt)
 
     try {
+      // @ts-ignore - for now
       const resp = await this.model.create({
         ...input,
         password: hashedPassword,
@@ -85,6 +93,7 @@ export default class UsersAPI extends MongoDataSource<IUserDocument> {
 
   async removeUser(_id: string) {
     try {
+      // @ts-ignore - for now
       const resp = await this.model.deleteOne({ _id })
       // even if user does not exist
       // would not throw error because deletedCount is just 0
@@ -108,6 +117,7 @@ export default class UsersAPI extends MongoDataSource<IUserDocument> {
       if (!update.username) {
         throw new Error('No Empty Strings')
       }
+      // @ts-ignore - for now
       const resp = await this.model.findOneAndUpdate({ _id }, update)
 
       return resp

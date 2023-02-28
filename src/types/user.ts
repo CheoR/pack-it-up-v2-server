@@ -1,6 +1,5 @@
-import { Document } from 'mongoose'
 
-export interface IUserDocument extends Document {
+export interface IUserDocument {
   email: string
   firstName: string
   lastName: string
@@ -8,7 +7,7 @@ export interface IUserDocument extends Document {
   username: string
 }
 
-export interface IRegisterUserInput extends Document {
+export interface IRegisterUserInput {
   input: {
     email: string
     firstName: string
@@ -23,7 +22,7 @@ export interface IRegisterUserResponse extends IUserDocument {
   refreshToken: string
 }
 
-export interface ILoginUserInput extends Document {
+export interface ILoginUserInput {
   input: {
     email: string
     password: string

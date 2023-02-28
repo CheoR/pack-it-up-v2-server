@@ -36,8 +36,10 @@ export default class BoxesAPI extends MongoDataSource<IBox> {
           })
         })
 
+        // @ts-ignore - for now
         resp = await this.model.insertMany(boxes)
       } else {
+        // @ts-ignore - for now
         const move = await this.model.create({
           move_id,
           description: description?.toLowerCase(),
@@ -61,6 +63,7 @@ export default class BoxesAPI extends MongoDataSource<IBox> {
   }
 
   async getBoxesByUserId(user_id: string) {
+    // @ts-ignore - for now
     const resp = await this.model.find({ user_id }).populate([
       {
         path: 'count',
@@ -79,6 +82,7 @@ export default class BoxesAPI extends MongoDataSource<IBox> {
     input,
   }: IBoxIdInput): Promise<DeleteResponse | BoxError | null> {
     try {
+      // @ts-ignore - for now
       const doc = await this.model.findOne({ _id: input._id })
       await doc?.deleteOne()
 
@@ -100,6 +104,7 @@ export default class BoxesAPI extends MongoDataSource<IBox> {
     const options = { returnOriginal: false }
 
     try {
+      // @ts-ignore - for now
       const resp = await this.model.findOneAndUpdate(filter, input, options)
       return resp
     } catch (error: unknown) {

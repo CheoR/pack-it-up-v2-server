@@ -38,8 +38,10 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
           })
         })
 
+        // @ts-ignore - for now
         resp = await this.model.insertMany(items)
       } else {
+        // @ts-ignore - for now
         const move = await this.model.create({
           box_id,
           description: description?.toLowerCase(),
@@ -71,6 +73,7 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
     const options = { returnOriginal: false }
 
     try {
+      // @ts-ignore - for now
       const resp = await this.model.findOneAndUpdate(filter, input, options)
       return resp
     } catch (error: unknown) {
@@ -89,6 +92,7 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
     input,
   }: IItemIdInput): Promise<DeleteResponse | ItemError | null> {
     try {
+      // @ts-ignore - for now
       const resp = await this.model.deleteOne({ _id: input._id })
       return { ok: true }
     } catch (error: unknown) {
@@ -104,6 +108,7 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
   }
 
   async getItemsByUserId(user_id: string) {
+    // @ts-ignore - for now
     const resp = await this.model.find({ user_id }).exec()
     return resp
   }

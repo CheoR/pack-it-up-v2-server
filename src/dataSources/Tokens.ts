@@ -35,6 +35,7 @@ export default class TokensAPI extends MongoDataSource<IRefreshTokenResponse> {
     input,
   }: FindByField): Promise<IRefreshTokenResponse | RefreshTokenError | null> {
     try {
+      // @ts-ignore - for now
       const resp = await this.model.findOne({ [field]: input })
 
       const accessToken = jwt.sign(
@@ -75,13 +76,14 @@ export default class TokensAPI extends MongoDataSource<IRefreshTokenResponse> {
       email: input.email,
     })
 
-    console.log('REFRESH TOKEN BEFOR HASHING')
-    console.log(refreshToken)
-    console.log('=====')
+    // console.log('REFRESH TOKEN BEFOR HASHING')
+    // console.log(refreshToken)
+    // console.log('=====')
     // const hashedRefreshToken = await bcrypt.hash(refreshToken, salt)
     const now = new Date()
 
     try {
+      // @ts-ignore - for now
       const resp = await this.model.create({
         user_id: input.user_id,
         expiresAt: new Date(

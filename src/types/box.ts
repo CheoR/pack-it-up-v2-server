@@ -1,8 +1,8 @@
-import { Document, Types } from 'mongoose'
+import { Types } from 'mongoose'
 
 // TODO: check for updates
 // https://github.com/GraphQLGuide/apollo-datasource-mongodb/issues/78
-export interface IBox extends Document {
+export interface IBox {
   description: string
   move_id: Types.ObjectId
   name: string

@@ -35,8 +35,10 @@ export default class MovesAPI extends MongoDataSource<IMove> {
           })
         })
 
+        // @ts-ignore - for now
         resp = await this.model.insertMany(moves)
       } else {
+        // @ts-ignore - for now
         const move = await this.model.create({
           name: name.toLowerCase(),
           description: description?.toLocaleLowerCase(),
@@ -59,6 +61,7 @@ export default class MovesAPI extends MongoDataSource<IMove> {
   }
 
   async getMovesByUserId(user_id: string) {
+    // @ts-ignore - for now
     const resp = await this.model.find({ user_id }).populate([
       {
         path: 'count',
@@ -80,6 +83,7 @@ export default class MovesAPI extends MongoDataSource<IMove> {
     input,
   }: IMoveIdInput): Promise<DeleteResponse | MoveError | null> {
     try {
+      // @ts-ignore - for now
       const doc = await this.model.findOne({ _id: input._id })
       await doc?.deleteOne()
 
@@ -103,6 +107,7 @@ export default class MovesAPI extends MongoDataSource<IMove> {
     const options = { returnOriginal: false }
 
     try {
+      // @ts-ignore - for now
       const resp = await this.model.findOneAndUpdate(filter, input, options)
       return resp
     } catch (error: unknown) {

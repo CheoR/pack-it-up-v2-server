@@ -1,9 +1,9 @@
-import { Document, Types } from 'mongoose'
+import { Types } from 'mongoose'
 
 // TODO: Remove Document - We strongly recommend against using this approach,
 // its support will be dropped in the next major version
 // https://mongoosejs.com/docs/typescript.html
-export interface IRefreshTokenDocument extends Document {
+export interface IRefreshTokenDocument {
   createdAt: Date
   expiresAt: Date
   refreshToken: string

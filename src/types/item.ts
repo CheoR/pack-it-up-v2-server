@@ -1,8 +1,8 @@
-import { Document, Types } from 'mongoose'
+import { Types } from 'mongoose'
 
 // TODO: check for updates
 // https://github.com/GraphQLGuide/apollo-datasource-mongodb/issues/78
-export interface IItem extends Document {
+export interface IItem {
   box_id: Types.ObjectId
   description: string
   isFragile: boolean
