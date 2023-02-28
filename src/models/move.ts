@@ -1,30 +1,38 @@
 import { model, Model, Schema } from 'mongoose'
 
 import { IMove } from '../types/move'
+import { IBox } from '../types/box'
 import { Item } from './item'
 import { Box } from './box'
-import { IBox } from '../types/box'
 
-const MoveSchema: Schema = new Schema<IMove>({
-  name: {
-    type: String,
-    trim: true,
-    lowercase: true,
-    required: true,
-    minLength: [2, 'Name be at least 2 characters'],
+const opts = {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
+}
+
+const MoveSchema: Schema = new Schema<IMove>(
+  {
+    name: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      required: true,
+      minLength: [2, 'Name be at least 2 characters'],
+    },
+    description: {
+      type: String,
+      trim: true,
+      lowercase: true,
+    },
+    user_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      trim: true,
+      required: true,
+    },
   },
-  description: {
-    type: String,
-    trim: true,
-    lowercase: true,
-  },
-  user_id: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    trim: true,
-    required: true,
-  },
-})
+  opts,
+)
 
 MoveSchema.virtual('count', {
   ref: 'Box',
@@ -38,7 +46,7 @@ MoveSchema.virtual('isFragile', {
   localField: '_id',
   foreignField: 'move_id',
 }).get(function (boxes) {
-  const isFragile = boxes?.some((box: any) => box.isFragile) || false
+  const isFragile = boxes?.some((box: IBox) => box.isFragile) || false
   return isFragile
 })
 
@@ -48,7 +56,7 @@ MoveSchema.virtual('value', {
   foreignField: 'move_id',
 }).get(function (boxes) {
   const value =
-    boxes?.reduce((acc: number, curr: any) => acc + curr.value, 0) || 0
+    boxes?.reduce((acc: number, curr: IBox) => acc + curr.value, 0) || 0
   return value
 })
 
