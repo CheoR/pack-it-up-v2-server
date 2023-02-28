@@ -2,6 +2,7 @@ import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { GraphQLError } from 'graphql'
 
 import { DeleteResponse } from '../types/utils'
+import { Box } from '../models/box'
 import {
   IBox,
   IBoxIdInput,
@@ -9,7 +10,6 @@ import {
   IBoxUpdateInput,
   BoxError,
 } from '../types/box'
-import { Box } from '../models/box'
 
 export default class BoxesAPI extends MongoDataSource<IBox> {
   // @ts-ignore
