@@ -74,6 +74,10 @@ export default class MovesAPI extends MongoDataSource<IMove> {
         path: 'value',
         populate: { path: 'value' },
       },
+      {
+        path: 'boxItemsCount',
+        populate: { path: 'items' },
+      },
     ])
 
     return resp

@@ -3,6 +3,11 @@ import { IItem } from '../types/item'
 import { IBox } from '../types/box'
 import { Item } from './item'
 
+const opts = {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
+}
+
 const BoxSchema: Schema = new Schema<IBox>({
   description: {
     type: String,
@@ -28,7 +33,7 @@ const BoxSchema: Schema = new Schema<IBox>({
     trim: true,
     required: true,
   },
-})
+}, opts)
 
 BoxSchema.virtual('count', {
   ref: 'Item', // The model to use
@@ -54,6 +59,16 @@ BoxSchema.virtual('value', {
   const value =
     items?.reduce((acc: number, curr: IItem) => acc + curr.value, 0) || 0
   return value
+})
+
+BoxSchema.virtual('items', {
+  // because virtual count won't pass value to Moves
+  // for some reason
+  ref: 'Item',
+  localField: '_id',
+  foreignField: 'box_id',
+}).get(function (items) {
+  return items.length || 0
 })
 
 BoxSchema.pre('deleteOne', { document: true, query: false }, async function () {

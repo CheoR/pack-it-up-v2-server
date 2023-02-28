@@ -3,6 +3,7 @@ import { model, Model, Schema } from 'mongoose'
 import { IMove } from '../types/move'
 import { Item } from './item'
 import { Box } from './box'
+import { IBox } from '../types/box'
 
 const MoveSchema: Schema = new Schema<IMove>({
   name: {
@@ -51,13 +52,26 @@ MoveSchema.virtual('value', {
   return value
 })
 
+MoveSchema.virtual('boxItemsCount', {
+  ref: 'Box',
+  localField: '_id',
+  foreignField: 'move_id',
+}).get(function (boxes) {
+  const count = boxes?.reduce(
+    (acc: number, curr: IBox & { items: 0 }) => acc + curr.items,
+    0,
+  )
+  return count
+})
+
 MoveSchema.pre(
   'deleteOne',
   { document: true, query: false },
   async function () {
     const docs = await Box.find({ move_id: this._id })
-    await Item.deleteMany({ box_id: { $in: docs }})
+    await Item.deleteMany({ box_id: { $in: docs } })
     await Box.deleteMany({ move_id: this._id })
-})
+  },
+)
 
 export const Move: Model<IMove> = model<IMove>('Move', MoveSchema)

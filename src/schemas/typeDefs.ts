@@ -85,6 +85,7 @@ export const typeDefs = `#graphql
     count: Int
     isFragile: Boolean
     value: Float
+    boxItemsCount: Int
   }
 
   type Item {

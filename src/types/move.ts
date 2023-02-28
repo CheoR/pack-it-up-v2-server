@@ -9,6 +9,7 @@ export interface IMove {
   count: number
   isFragile: boolean
   value: number
+  boxItemsCount: number
 }
 
 export interface IMoveInput {
