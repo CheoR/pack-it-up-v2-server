@@ -8,32 +8,35 @@ const opts = {
   toObject: { virtuals: true },
 }
 
-const BoxSchema: Schema = new Schema<IBox>({
-  description: {
-    type: String,
-    trim: true,
-    lowercase: true,
+const BoxSchema: Schema = new Schema<IBox>(
+  {
+    description: {
+      type: String,
+      trim: true,
+      lowercase: true,
+    },
+    name: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      required: true,
+      minLength: [2, 'Name be at least 2 characters'],
+    },
+    move_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Move',
+      trim: true,
+      required: true,
+    },
+    user_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      trim: true,
+      required: true,
+    },
   },
-  name: {
-    type: String,
-    trim: true,
-    lowercase: true,
-    required: true,
-    minLength: [2, 'Name be at least 2 characters'],
-  },
-  move_id: {
-    type: Schema.Types.ObjectId,
-    ref: 'Move',
-    trim: true,
-    required: true,
-  },
-  user_id: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    trim: true,
-    required: true,
-  },
-}, opts)
+  opts,
+)
 
 BoxSchema.virtual('count', {
   ref: 'Item', // The model to use
