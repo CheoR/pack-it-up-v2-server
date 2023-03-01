@@ -30,36 +30,52 @@ export const Query = {
     // @ts-ignore: Make type
     args,
     // @ts-ignore: Make type
-    { dataSources: { itemsAPI, boxesAPI, movesAPI }, user_id },
+    { dataSources: { movesAPI }, user_id },
   ) => {
-    const items = await itemsAPI.getItemsByUserId(user_id)
-    const boxes = await boxesAPI.getBoxesByUserId(user_id)
-    const moves = await movesAPI.getMovesByUserId(user_id)
-    const value = items.reduce(
-      (acc: number, curr: IItem) => acc + curr.value,
+    const resp = await movesAPI.getMovesByUserId(user_id)
+    interface Move {
+      _id: string
+      boxItemsCount: number
+      count: number
+      isFragile: boolean
+      value: number
+    }
+
+    const value = resp.reduce((acc: number, move: Move) => acc + move.value , 0)
+    const boxCount = resp.reduce(
+      (acc: number, curr: Move) => acc + curr.count,
       0,
     )
-    const isFragile = items.some((item: IItem) => item.isFragile)
+    const itemCount = resp.reduce(
+      (acc: number, move: Move) => acc + move.boxItemsCount,
+      0,
+    )
+    const isFragile = resp.some((move: Move) => move.isFragile)
 
-    return {
-      data: [
-        {
-          _id: 'move',
-          count: moves.length || 0,
-        },
-        {
-          _id: 'box',
-          count: boxes.length || 0,
-        },
-        {
-          _id: 'item',
-          count: items.length || 0,
-          value: value || 0,
-          isFragile,
-        },
-      ],
-    }
+    return [
+      {
+        _id: 'move',
+        count: resp.length,
+        value,
+        isFragile,
+        name: 'Moves',
+        description: 'Contains Boxes',
+      },
+      {
+        _id: 'box',
+        count: boxCount,
+        name: 'Boxes',
+        description: 'Contains Items',
+      },
+      {
+        _id: 'item',
+        count: itemCount,
+        name: 'Items',
+        description: 'Individual Items',
+      },
+    ]
   },
+
   // @ts-ignore: Make type
   getMovesByUserId: async (
     // @ts-ignore: Make type

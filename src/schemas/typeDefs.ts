@@ -3,7 +3,7 @@ export const typeDefs = `#graphql
   type Query {
     getBoxesByUserId: [Box!]!
     getItemsByUserId: [Item!]!
-    getHomeData: SummaryData
+    getHomeData: [HomeData]
     getMove(input: MoveIdInput!): Move
     getMovesByUserId: [Move!]!
     getUser(input: UserIdInput!): User
@@ -30,6 +30,8 @@ export const typeDefs = `#graphql
   type HomeData {
     _id: ID
     count: Int
+    description: String
+    name: String
     isFragile: Boolean
     value: Float
   }
