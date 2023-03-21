@@ -2,6 +2,7 @@ import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { GraphQLError } from 'graphql'
 
 import { DeleteResponse } from '../types/utils'
+import { Item } from '../models/item'
 import {
   IItem,
   IItemIdInput,
@@ -9,7 +10,6 @@ import {
   IItemUpdateInput,
   ItemError,
 } from '../types/item'
-import { Item } from '../models/item'
 
 export default class ItemsAPI extends MongoDataSource<IItem> {
   // @ts-ignore
@@ -20,7 +20,16 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
   }
 
   async createItem({
-    input: { box_id, count, description, name, isFragile, user_id, value },
+    input: {
+      box_id,
+      count,
+      description,
+      name,
+      image_uri,
+      isFragile,
+      user_id,
+      value,
+    },
   }: IItemInput): Promise<IItem | IItem[] | ItemError> {
     let resp: IItem[] = []
     if (!count) count = 1
@@ -32,6 +41,7 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
             box_id,
             description: description?.toLowerCase(),
             name: `${name.toLowerCase()} ${i}`,
+            image_uri,
             isFragile,
             user_id,
             value,
@@ -46,6 +56,7 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
           box_id,
           description: description?.toLowerCase(),
           name: name.toLowerCase(),
+          image_uri,
           isFragile,
           user_id,
           value,

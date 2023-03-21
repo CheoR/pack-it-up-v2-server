@@ -94,6 +94,7 @@ export const typeDefs = `#graphql
     _id: ID!
     box_id: String!
     description: String
+    image_uri: String
     isFragile: Boolean
     name: String!
     user_id: String!
@@ -140,6 +141,7 @@ export const typeDefs = `#graphql
     box_id: ID!
     count: Int
     description: String
+    image_uri: String
     isFragile: Boolean
     name: String!
     value: Float
@@ -164,6 +166,7 @@ export const typeDefs = `#graphql
     _id: ID!
     box_id: ID!
     description: String
+    image_uri: String
     isFragile: Boolean
     name: String
     value: Float

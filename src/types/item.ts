@@ -5,6 +5,7 @@ import { Types } from 'mongoose'
 export interface IItem {
   box_id: Types.ObjectId
   description: string
+  image_uri: string
   isFragile: boolean
   name: string
   user_id: Types.ObjectId
@@ -16,6 +17,7 @@ export interface IItemInput {
     box_id: Types.ObjectId
     count: number
     description: string
+    image_uri: string
     isFragile: boolean
     name: string
     user_id: Types.ObjectId
@@ -28,6 +30,7 @@ export interface IItemUpdateInput {
     _id: Types.ObjectId
     box_id: Types.ObjectId
     description: string
+    image_uri: string
     isFragile: boolean
     name: string
     user_id: Types.ObjectId
