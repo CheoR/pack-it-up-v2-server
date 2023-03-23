@@ -10,6 +10,7 @@ import {
   IItemUpdateInput,
   ItemError,
 } from '../types/item'
+import uploadImage from '../cloudinary/upload'
 
 export default class ItemsAPI extends MongoDataSource<IItem> {
   // @ts-ignore
@@ -32,7 +33,15 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
     },
   }: IItemInput): Promise<IItem | IItem[] | ItemError> {
     let resp: IItem[] = []
+    let imgUrl = ''
+
     if (!count) count = 1
+
+    if (image_uri) {
+      console.log(`image_uri`)
+      console.log(image_uri)
+      imgUrl = uploadImage(image_uri)
+    }
 
     try {
       if (count > 1) {
@@ -41,7 +50,7 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
             box_id,
             description: description?.toLowerCase(),
             name: `${name.toLowerCase()} ${i}`,
-            image_uri,
+            image_uri: imgUrl || image_uri,
             isFragile,
             user_id,
             value,
@@ -82,10 +91,24 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
   }: IItemUpdateInput): Promise<IItem | ItemError | null> {
     const filter = { _id: input._id }
     const options = { returnOriginal: false }
+    let imgUrl: Promise<string>
+
+    if (input.image_uri) {
+      console.log(`input.image_uri`)
+      console.log(input.image_uri)
+      const url = uploadImage(input.image_uri)
+      console.log(`result url in item is`)
+      console.log(url)
+      input.image_uri = url // = uploadImage(input.image_uri)
+    }
 
     try {
       // @ts-ignore - for now
       const resp = await this.model.findOneAndUpdate(filter, input, options)
+      console.log(` = ===================== `)
+      // TODO: MAKE SURE IMAGE_URL rop returned from find one andupdate
+      console.log(resp)
+      console.log('^^^^^^^^^^^^^^^666')
       return resp
     } catch (error: unknown) {
       if (error instanceof Error) {
