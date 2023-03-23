@@ -13,6 +13,7 @@ const ItemSchema: Schema = new Schema<IItem>({
     trim: true,
     lowercase: true,
   },
+  image_uri: String,
   isFragile: Boolean,
   name: {
     type: String,
