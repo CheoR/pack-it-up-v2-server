@@ -11,7 +11,6 @@ import {
   IItemUpdateInput,
   ItemError,
 } from '../types/item'
-import uploadImage from '../cloudinary/upload'
 
 export default class ItemsAPI extends MongoDataSource<IItem> {
   // @ts-ignore
@@ -90,7 +89,6 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
   }: IItemUpdateInput): Promise<IItem | ItemError | null> {
     const filter = { _id: input._id }
     const options = { returnOriginal: false }
-    let imgUrl: Promise<string>
 
     if (input.image_uri) {
       const url = uploadImage(input.image_uri, input.name)
@@ -100,10 +98,6 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
     try {
       // @ts-ignore - for now
       const resp = await this.model.findOneAndUpdate(filter, input, options)
-      console.log(` = ===================== `)
-      // TODO: MAKE SURE IMAGE_URL rop returned from find one andupdate
-      console.log(resp)
-      console.log('^^^^^^^^^^^^^^^666')
       return resp
     } catch (error: unknown) {
       if (error instanceof Error) {
