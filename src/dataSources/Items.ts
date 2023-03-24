@@ -2,6 +2,7 @@ import { MongoDataSource } from 'apollo-datasource-mongodb'
 import { GraphQLError } from 'graphql'
 
 import { DeleteResponse } from '../types/utils'
+import uploadImage from '../cloudinary/upload'
 import { Item } from '../models/item'
 import {
   IItem,
@@ -38,9 +39,7 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
     if (!count) count = 1
 
     if (image_uri) {
-      console.log(`image_uri`)
-      console.log(image_uri)
-      imgUrl = uploadImage(image_uri)
+      imgUrl = uploadImage(image_uri, name)
     }
 
     try {
@@ -94,12 +93,8 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
     let imgUrl: Promise<string>
 
     if (input.image_uri) {
-      console.log(`input.image_uri`)
-      console.log(input.image_uri)
-      const url = uploadImage(input.image_uri)
-      console.log(`result url in item is`)
-      console.log(url)
-      input.image_uri = url // = uploadImage(input.image_uri)
+      const url = uploadImage(input.image_uri, input.name)
+      input.image_uri = url
     }
 
     try {
