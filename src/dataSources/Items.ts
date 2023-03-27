@@ -37,8 +37,11 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
 
     if (!count) count = 1
 
-    if (image_uri) {
-      imgUrl = uploadImage(image_uri, name)
+    if (imgUrl) {
+      const secure_url = await uploadImage(imgUrl, name)
+      if (typeof secure_url === 'string') {
+        imgUrl = secure_url
+      }
     }
 
     try {
@@ -91,8 +94,10 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
     const options = { returnOriginal: false }
 
     if (input.image_uri) {
-      const url = uploadImage(input.image_uri, input.name)
-      input.image_uri = url
+      const secure_url = await uploadImage(input.image_uri, input.name)
+      if (typeof secure_url === 'string') {
+        input.image_uri = secure_url
+      }
     }
 
     try {
