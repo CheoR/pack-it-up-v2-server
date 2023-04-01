@@ -1,5 +1,3 @@
-import { IItem } from '../types/item'
-
 export const Query = {
   // @ts-ignore: Make type
   getBoxesByUserId: async (
@@ -41,7 +39,7 @@ export const Query = {
       value: number
     }
 
-    const value = resp.reduce((acc: number, move: Move) => acc + move.value , 0)
+    const value = resp.reduce((acc: number, move: Move) => acc + move.value, 0)
     const boxCount = resp.reduce(
       (acc: number, curr: Move) => acc + curr.count,
       0,
@@ -98,7 +96,7 @@ export const Query = {
     // @ts-ignore: Make type
     { input: { _id } },
     // @ts-ignore: Make type
-    { dataSources: { usersAPI }, user_id },
+    { dataSources: { usersAPI } }, // user_id
   ) => {
     try {
       const resp = await usersAPI.getUser(_id)
