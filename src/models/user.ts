@@ -3,7 +3,8 @@ import { model, Model, Schema } from 'mongoose'
 import { IUserDocument } from '../types/user'
 
 const validateEmail = (email: string) => {
-  const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+  // const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+  const re = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
   return re.test(email)
 }
 
