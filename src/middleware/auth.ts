@@ -1,9 +1,15 @@
 import { ApolloServerErrorCode } from '@apollo/server/errors'
 import jwt from 'jsonwebtoken'
 
-// TODO: replace any
-// @ts-ignore: Make type
-export const auth = (context: any) => {
+type Context = {
+  req: {
+    headers: {
+      authorization: string
+    }
+  }
+}
+
+export const auth = (context: Context) => {
   const authHeader = context.req.headers.authorization
 
   if (authHeader) {
