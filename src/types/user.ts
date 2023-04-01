@@ -1,4 +1,3 @@
-
 export interface IUserDocument {
   email: string
   firstName: string
