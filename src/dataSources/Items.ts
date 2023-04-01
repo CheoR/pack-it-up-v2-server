@@ -121,7 +121,7 @@ export default class ItemsAPI extends MongoDataSource<IItem> {
   }: IItemIdInput): Promise<DeleteResponse | ItemError | null> {
     try {
       // @ts-ignore - for now
-      const resp = await this.model.deleteOne({ _id: input._id })
+      await this.model.deleteOne({ _id: input._id })
       return { ok: true }
     } catch (error: unknown) {
       if (error instanceof Error) {
