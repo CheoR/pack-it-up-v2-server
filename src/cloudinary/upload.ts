@@ -25,8 +25,8 @@ export default async function uploadImage(
 ): Promise<string> {
   const secure_url = await getSecureUrl(name, uri)
 
-  // Generate
-  const url = cloudinary.url(name, {
+  // Generate const url =
+  cloudinary.url(name, {
     width: 100,
     height: 150,
     Crop: 'fill',
@@ -34,7 +34,6 @@ export default async function uploadImage(
 
   // The output url
   // https://res.cloudinary.com/<cloud_name>/image/upload/h_150,w_100/olympic_flag
-  console.log(`########### uploads.tsx uploadImage secure_url: ${secure_url}`)
 
-  return typeof secure_url === 'string' ? secure_url : 'moo'
+  return typeof secure_url === 'string' ? secure_url : 'no_img'
 }
